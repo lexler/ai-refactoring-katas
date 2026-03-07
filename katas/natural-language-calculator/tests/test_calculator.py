@@ -45,7 +45,7 @@ class TestParseNumberWord(unittest.TestCase):
             parse_number_word('abc')
 
 
-class TestCalcSimple(unittest.TestCase):
+class TestEvaluateSimpleExpression(unittest.TestCase):
     """Test simple calculation operations."""
 
     def test_addition(self):
