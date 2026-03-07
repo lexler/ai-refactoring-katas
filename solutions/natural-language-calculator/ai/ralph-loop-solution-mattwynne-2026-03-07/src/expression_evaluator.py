@@ -18,8 +18,6 @@ def normalize_line(line):
     return line
 
 def find_nested_operation(line):
-    """Try to split line on a nested operation separator like ', plus the result of ' or ' minus the result of '.
-    Returns (left_str, right_str, operator_fn) or None if no nested operation found."""
     for op_word, op_fn in OPERATORS.items():
         for separator in [', ' + op_word + ' the result of ', ' ' + op_word + ' the result of ']:
             if separator in line:
@@ -28,14 +26,12 @@ def find_nested_operation(line):
     return None
 
 def format_result(value):
-    """Format a numeric result: return int if whole number, otherwise round to 2 decimal places."""
     if value == int(value):
         return int(value)
     else:
         return round(value, 2)
 
 def evaluate(expression):
-    """Evaluate a normalized natural language math expression and return a numeric result."""
     try:
         nested = find_nested_operation(expression)
         if nested:
