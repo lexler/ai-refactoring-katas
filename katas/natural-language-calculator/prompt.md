@@ -15,3 +15,5 @@ Here's the flow:
 7. Update the yak map, adding any additional context or yaks that you've discovered.
 
 Only do ONE leaf yak per run. Keep changes small and safe.
+
+DO NOT TOUCH THE TESTS.
