@@ -21,7 +21,7 @@ def process_line(line):
     line = normalize_line(line)
     result = try_nested_result_of(line)
     if result is None:
-        result = calc_simple(line)
+        result = evaluate_expression(line)
     return format_result(result)
 
 def try_nested_result_of(line):
@@ -29,8 +29,8 @@ def try_nested_result_of(line):
         for separator in [f', {op_name} the result of ', f' {op_name} the result of ']:
             if separator in line:
                 parts = line.split(separator)
-                left_val = calc_simple(parts[0])
-                right_val = calc_simple(parts[1])
+                left_val = evaluate_expression(parts[0])
+                right_val = evaluate_expression(parts[1])
                 return op_func(left_val, right_val)
     return None
 
@@ -39,7 +39,7 @@ def format_result(result):
         return int(result)
     return round(result, 2)
 
-def calc_simple(expression):
+def evaluate_expression(expression):
     expression = expression.strip()
 
     # Handle comma-separated operations (precedence)
@@ -47,7 +47,7 @@ def calc_simple(expression):
         parts = expression.split(', ')
         left = parts[0]
         rest = parts[1]
-        left_val = calc_simple(left)
+        left_val = evaluate_expression(left)
         for op_name, op_func in OPERATORS.items():
             if rest.startswith(op_name + ' '):
                 right_val = parse_number(rest[len(op_name) + 1:])
@@ -64,3 +64,5 @@ def calc_simple(expression):
     else:
         # Might be just a number
         return parse_number(expression)
+
+calc_simple = evaluate_expression
