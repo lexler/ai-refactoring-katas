@@ -53,20 +53,26 @@ def process_line(line):
     result = evaluate(expression)
     return format_result(result)
 
+def apply_comma_precedence(expression):
+    if ', ' not in expression:
+        return None
+    parts = expression.split(', ')
+    left = parts[0]
+    rest = parts[1]
+    left_val = evaluate_simple_expression(left)
+    for op_word, op_fn in OPERATORS.items():
+        prefix = op_word + ' '
+        if rest.startswith(prefix):
+            right_val = parse_number_word(rest[len(prefix):])
+            return op_fn(left_val, right_val)
+    return None
+
 def evaluate_simple_expression(expression):
     expression = expression.strip()
 
-    # Handle comma-separated operations (precedence)
-    if ', ' in expression:
-        parts = expression.split(', ')
-        left = parts[0]
-        rest = parts[1]
-        left_val = evaluate_simple_expression(left)
-        for op_word, op_fn in OPERATORS.items():
-            prefix = op_word + ' '
-            if rest.startswith(prefix):
-                right_val = parse_number_word(rest[len(prefix):])
-                return op_fn(left_val, right_val)
+    result = apply_comma_precedence(expression)
+    if result is not None:
+        return result
 
     # Try to parse as "X <operator> Y" (split only on first occurrence,
     # recursively evaluate the right-hand side for chained operations)
