@@ -59,7 +59,7 @@ def evaluate_expression(expression):
             num1 = parse_number(parts[0].strip())
             num2 = parse_number(parts[1].strip())
             return op_func(num1, num2)
-    else:
-        return parse_number(expression)
+
+    return parse_number(expression)
 
 calc_simple = evaluate_expression
