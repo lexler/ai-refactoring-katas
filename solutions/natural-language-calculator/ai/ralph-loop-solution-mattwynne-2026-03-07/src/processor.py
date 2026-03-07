@@ -30,15 +30,18 @@ def find_nested_operation(line):
 def process_line(line):
     line = normalize_line(line)
 
-    nested = find_nested_operation(line)
-    if nested:
-        left_str, right_str, op_fn = nested
-        left_val = calc_simple(left_str)
-        right_val = calc_simple(right_str)
-        result = op_fn(left_val, right_val)
-    else:
-        # Simple operation
-        result = calc_simple(line)
+    try:
+        nested = find_nested_operation(line)
+        if nested:
+            left_str, right_str, op_fn = nested
+            left_val = calc_simple(left_str)
+            right_val = calc_simple(right_str)
+            result = op_fn(left_val, right_val)
+        else:
+            # Simple operation
+            result = calc_simple(line)
+    except (ValueError, ZeroDivisionError) as e:
+        raise type(e)(f"Cannot evaluate '{line}': {e}") from e
 
     # Format the result
     if result == int(result):
