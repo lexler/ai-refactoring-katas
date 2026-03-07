@@ -12,7 +12,7 @@ WORD_TO_NUMBER = {
     'ten': 10, '10': 10
 }
 
-def get_num(word):
+def parse_number(word):
     word = word.strip().lower()
 
     if word in WORD_TO_NUMBER:
@@ -22,3 +22,5 @@ def get_num(word):
         return int(word)
     except ValueError:
         raise ValueError(f"Unknown number: '{word}'")
+
+get_num = parse_number

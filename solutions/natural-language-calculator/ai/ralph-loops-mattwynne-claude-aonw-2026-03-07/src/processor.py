@@ -1,6 +1,6 @@
 import operator
 
-from utils import get_num
+from utils import parse_number
 
 OPERATORS = {
     'plus': operator.add,
@@ -50,7 +50,7 @@ def calc_simple(expression):
         left_val = calc_simple(left)
         for op_name, op_func in OPERATORS.items():
             if rest.startswith(op_name + ' '):
-                right_val = get_num(rest[len(op_name) + 1:])
+                right_val = parse_number(rest[len(op_name) + 1:])
                 return op_func(left_val, right_val)
 
     # Try to parse the expression
@@ -58,9 +58,9 @@ def calc_simple(expression):
         separator = f' {op_name} '
         if separator in expression:
             parts = expression.split(separator)
-            num1 = get_num(parts[0].strip())
-            num2 = get_num(parts[1].strip())
+            num1 = parse_number(parts[0].strip())
+            num2 = parse_number(parts[1].strip())
             return op_func(num1, num2)
     else:
         # Might be just a number
-        return get_num(expression)
+        return parse_number(expression)
