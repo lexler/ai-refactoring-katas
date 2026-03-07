@@ -20,5 +20,5 @@ def get_num(word):
 
     try:
         return int(word)
-    except:
-        raise ValueError("Unknown number")
+    except ValueError:
+        raise ValueError(f"Unknown number word: '{word}'")
