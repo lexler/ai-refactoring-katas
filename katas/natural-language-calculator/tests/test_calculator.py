@@ -10,7 +10,7 @@ from number_parser import parse_number_word
 from natural_language_calculator import main
 
 
-class TestGetNum(unittest.TestCase):
+class TestParseNumberWord(unittest.TestCase):
     """Test the word-to-number conversion."""
 
     def test_word_numbers(self):
