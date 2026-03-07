@@ -19,12 +19,12 @@ def normalize_line(line):
 
 def process_line(line):
     line = normalize_line(line)
-    result = try_nested_result_of(line)
+    result = evaluate_nested_expression(line)
     if result is None:
         result = evaluate_expression(line)
     return format_result(result)
 
-def try_nested_result_of(line):
+def evaluate_nested_expression(line):
     for op_name, op_func in OPERATORS.items():
         for separator in [f', {op_name} the result of ', f' {op_name} the result of ']:
             if separator in line:
