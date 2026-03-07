@@ -35,11 +35,12 @@ def process_line(line):
     if result is None:
         result = calc_simple(line)
 
-    # Format the result
+    return format_result(result)
+
+def format_result(result):
     if result == int(result):
         return int(result)
-    else:
-        return round(result, 2)
+    return round(result, 2)
 
 def calc_simple(expression):
     expression = expression.strip()
