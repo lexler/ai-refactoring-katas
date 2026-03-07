@@ -104,26 +104,13 @@ def calc_simple(expression):
                 return op_func(left_val, right_val)
 
     # Try to parse the expression
-    if ' plus ' in expression:
-        parts = expression.split(' plus ')
-        num1 = get_num(parts[0].strip())
-        num2 = get_num(parts[1].strip())
-        return num1 + num2
-    elif ' minus ' in expression:
-        parts = expression.split(' minus ')
-        num1 = get_num(parts[0].strip())
-        num2 = get_num(parts[1].strip())
-        return num1 - num2
-    elif ' times ' in expression:
-        parts = expression.split(' times ')
-        num1 = get_num(parts[0].strip())
-        num2 = get_num(parts[1].strip())
-        return num1 * num2
-    elif ' divided by ' in expression:
-        parts = expression.split(' divided by ')
-        num1 = get_num(parts[0].strip())
-        num2 = get_num(parts[1].strip())
-        return num1 / num2
+    for op_name, op_func in OPERATORS.items():
+        separator = f' {op_name} '
+        if separator in expression:
+            parts = expression.split(separator)
+            num1 = get_num(parts[0].strip())
+            num2 = get_num(parts[1].strip())
+            return op_func(num1, num2)
     else:
         # Might be just a number
         return get_num(expression)
