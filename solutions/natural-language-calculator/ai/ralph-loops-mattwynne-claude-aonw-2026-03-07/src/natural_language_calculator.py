@@ -14,8 +14,8 @@ def main(input_file=None):
     try:
         with open(input_file, 'r') as f:
             lines = f.readlines()
-    except:
-        print(f"Error: could not read input file '{input_file}'")
+    except (FileNotFoundError, PermissionError, IOError) as e:
+        print(f"Error: could not read input file '{input_file}': {e}")
         return 1
 
     results = []
@@ -25,8 +25,8 @@ def main(input_file=None):
             try:
                 result = process_line(line)
                 results.append(result)
-            except:
-                print(f"Error: could not process expression '{line}'")
+            except (ValueError, ZeroDivisionError) as e:
+                print(f"Error: could not process expression '{line}': {e}")
                 return 1
 
     output_file = input_file.replace('.txt', '_results.txt')
@@ -34,8 +34,8 @@ def main(input_file=None):
         with open(output_file, 'w') as f:
             for r in results:
                 f.write(str(r) + '\n')
-    except:
-        print(f"Error: could not write output file '{output_file}'")
+    except (PermissionError, IOError) as e:
+        print(f"Error: could not write output file '{output_file}': {e}")
         return 1
 
     print(f"Results written to {output_file}")
