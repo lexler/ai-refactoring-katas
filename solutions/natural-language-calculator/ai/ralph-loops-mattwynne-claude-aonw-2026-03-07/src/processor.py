@@ -50,9 +50,9 @@ def evaluate_expression(expression):
         separator = f' {op_name} '
         if separator in expression:
             parts = expression.split(separator)
-            num1 = parse_number(parts[0].strip())
-            num2 = parse_number(parts[1].strip())
-            return op_func(num1, num2)
+            left_val = evaluate_expression(parts[0])
+            right_val = evaluate_expression(parts[1])
+            return op_func(left_val, right_val)
 
     return parse_number(expression)
 
