@@ -1,4 +1,13 @@
+import operator
+
 from utils import get_num
+
+OPERATORS = {
+    'plus': operator.add,
+    'minus': operator.sub,
+    'times': operator.mul,
+    'divided by': operator.truediv,
+}
 
 RESULT_PREFIX = 'the result of '
 
