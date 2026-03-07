@@ -98,19 +98,10 @@ def calc_simple(expression):
         left = parts[0]
         rest = parts[1]
         left_val = calc_simple(left)
-        # Now parse the rest to see what operation
-        if rest.startswith('minus '):
-            right_val = get_num(rest[6:])
-            return left_val - right_val
-        elif rest.startswith('plus '):
-            right_val = get_num(rest[5:])
-            return left_val + right_val
-        elif rest.startswith('times '):
-            right_val = get_num(rest[6:])
-            return left_val * right_val
-        elif rest.startswith('divided by '):
-            right_val = get_num(rest[11:])
-            return left_val / right_val
+        for op_name, op_func in OPERATORS.items():
+            if rest.startswith(op_name + ' '):
+                right_val = get_num(rest[len(op_name) + 1:])
+                return op_func(left_val, right_val)
 
     # Try to parse the expression
     if ' plus ' in expression:
