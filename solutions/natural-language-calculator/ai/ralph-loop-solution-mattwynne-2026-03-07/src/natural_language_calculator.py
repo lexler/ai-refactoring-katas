@@ -25,7 +25,7 @@ def main(input_file=None):
             try:
                 result = process_line(line)
                 results.append(result)
-            except (ValueError, Exception) as e:
+            except Exception as e:
                 print(f"Error processing expression '{line}': {e}")
                 return 1
 
