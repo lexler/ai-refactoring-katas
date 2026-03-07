@@ -34,22 +34,23 @@ def format_result(value):
     else:
         return round(value, 2)
 
-def process_line(line):
-    line = normalize_line(line)
-
+def evaluate(expression):
+    """Evaluate a normalized natural language math expression and return a numeric result."""
     try:
-        nested = find_nested_operation(line)
+        nested = find_nested_operation(expression)
         if nested:
             left_str, right_str, op_fn = nested
             left_val = calc_simple(left_str)
             right_val = calc_simple(right_str)
-            result = op_fn(left_val, right_val)
+            return op_fn(left_val, right_val)
         else:
-            # Simple operation
-            result = calc_simple(line)
+            return calc_simple(expression)
     except (ValueError, ZeroDivisionError) as e:
-        raise type(e)(f"Cannot evaluate '{line}': {e}") from e
+        raise type(e)(f"Cannot evaluate '{expression}': {e}") from e
 
+def process_line(line):
+    expression = normalize_line(line)
+    result = evaluate(expression)
     return format_result(result)
 
 def calc_simple(expression):
