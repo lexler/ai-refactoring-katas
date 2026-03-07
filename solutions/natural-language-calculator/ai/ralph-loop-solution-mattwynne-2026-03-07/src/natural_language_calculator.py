@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from processor import process_line
+from expression_evaluator import process_line
 
 def main(input_file=None):
     if input_file is None:

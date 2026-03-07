@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from processor import process_line, calc_simple
+from expression_evaluator import process_line, calc_simple
 from number_parser import parse_number_word
 from natural_language_calculator import main
 
