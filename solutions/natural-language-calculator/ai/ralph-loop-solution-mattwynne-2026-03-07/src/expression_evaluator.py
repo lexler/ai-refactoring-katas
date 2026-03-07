@@ -40,11 +40,11 @@ def evaluate(expression):
         nested = find_nested_operation(expression)
         if nested:
             left_str, right_str, op_fn = nested
-            left_val = calc_simple(left_str)
-            right_val = calc_simple(right_str)
+            left_val = evaluate_simple_expression(left_str)
+            right_val = evaluate_simple_expression(right_str)
             return op_fn(left_val, right_val)
         else:
-            return calc_simple(expression)
+            return evaluate_simple_expression(expression)
     except (ValueError, ZeroDivisionError) as e:
         raise type(e)(f"Cannot evaluate '{expression}': {e}") from e
 
@@ -53,7 +53,7 @@ def process_line(line):
     result = evaluate(expression)
     return format_result(result)
 
-def calc_simple(expression):
+def evaluate_simple_expression(expression):
     expression = expression.strip()
 
     # Handle comma-separated operations (precedence)
@@ -61,7 +61,7 @@ def calc_simple(expression):
         parts = expression.split(', ')
         left = parts[0]
         rest = parts[1]
-        left_val = calc_simple(left)
+        left_val = evaluate_simple_expression(left)
         for op_word, op_fn in OPERATORS.items():
             prefix = op_word + ' '
             if rest.startswith(prefix):
@@ -75,7 +75,7 @@ def calc_simple(expression):
         if separator in expression:
             parts = expression.split(separator, 1)
             num1 = parse_number_word(parts[0].strip())
-            num2 = calc_simple(parts[1].strip())
+            num2 = evaluate_simple_expression(parts[1].strip())
             return op_fn(num1, num2)
 
     # Might be just a number

@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from expression_evaluator import process_line, calc_simple
+from expression_evaluator import process_line, evaluate_simple_expression
 from number_parser import parse_number_word
 from natural_language_calculator import main
 
@@ -50,46 +50,46 @@ class TestCalcSimple(unittest.TestCase):
 
     def test_addition(self):
         """Test simple addition."""
-        self.assertEqual(calc_simple('one plus three'), 4)
-        self.assertEqual(calc_simple('five plus five'), 10)
+        self.assertEqual(evaluate_simple_expression('one plus three'), 4)
+        self.assertEqual(evaluate_simple_expression('five plus five'), 10)
 
     def test_subtraction(self):
         """Test simple subtraction."""
-        self.assertEqual(calc_simple('eight minus two'), 6)
-        self.assertEqual(calc_simple('ten minus one'), 9)
+        self.assertEqual(evaluate_simple_expression('eight minus two'), 6)
+        self.assertEqual(evaluate_simple_expression('ten minus one'), 9)
 
     def test_multiplication(self):
         """Test simple multiplication."""
-        self.assertEqual(calc_simple('three times three'), 9)
-        self.assertEqual(calc_simple('six times five'), 30)
+        self.assertEqual(evaluate_simple_expression('three times three'), 9)
+        self.assertEqual(evaluate_simple_expression('six times five'), 30)
 
     def test_division(self):
         """Test simple division."""
-        self.assertEqual(calc_simple('six divided by two'), 3)
-        self.assertAlmostEqual(calc_simple('three divided by nine'), 0.333, places=2)
+        self.assertEqual(evaluate_simple_expression('six divided by two'), 3)
+        self.assertAlmostEqual(evaluate_simple_expression('three divided by nine'), 0.333, places=2)
 
     def test_just_a_number(self):
         """Test that a single number is returned as-is."""
-        self.assertEqual(calc_simple('five'), 5)
-        self.assertEqual(calc_simple('10'), 10)
+        self.assertEqual(evaluate_simple_expression('five'), 5)
+        self.assertEqual(evaluate_simple_expression('10'), 10)
 
     def test_chained_operations(self):
         """Test that chained operations evaluate left-to-right."""
         # "one plus two plus three" = 1 + (2 + 3) = 6
-        self.assertEqual(calc_simple('one plus two plus three'), 6)
+        self.assertEqual(evaluate_simple_expression('one plus two plus three'), 6)
         # "ten minus three minus two" = 10 - (3 - 2) = 9
-        self.assertEqual(calc_simple('ten minus three minus two'), 9)
+        self.assertEqual(evaluate_simple_expression('ten minus three minus two'), 9)
 
     def test_precedence_with_comma(self):
         """Test that comma creates precedence (calculates left side first)."""
         # "four plus one, minus five" means "(4 + 1) - 5" = 0
-        self.assertEqual(calc_simple('four plus one, minus five'), 0)
+        self.assertEqual(evaluate_simple_expression('four plus one, minus five'), 0)
         # "three times three, divided by two" means "(3 * 3) / 2" = 4.5
-        self.assertEqual(calc_simple('three times three, divided by two'), 4.5)
+        self.assertEqual(evaluate_simple_expression('three times three, divided by two'), 4.5)
         # "two times three, plus one" means "(2 * 3) + 1" = 7
-        self.assertEqual(calc_simple('two times three, plus one'), 7)
+        self.assertEqual(evaluate_simple_expression('two times three, plus one'), 7)
         # "five plus two, times three" means "(5 + 2) * 3" = 21
-        self.assertEqual(calc_simple('five plus two, times three'), 21)
+        self.assertEqual(evaluate_simple_expression('five plus two, times three'), 21)
 
 
 class TestProcessLine(unittest.TestCase):
