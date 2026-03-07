@@ -27,6 +27,13 @@ def find_nested_operation(line):
                 return (parts[0], parts[1], op_fn)
     return None
 
+def format_result(value):
+    """Format a numeric result: return int if whole number, otherwise round to 2 decimal places."""
+    if value == int(value):
+        return int(value)
+    else:
+        return round(value, 2)
+
 def process_line(line):
     line = normalize_line(line)
 
@@ -43,11 +50,7 @@ def process_line(line):
     except (ValueError, ZeroDivisionError) as e:
         raise type(e)(f"Cannot evaluate '{line}': {e}") from e
 
-    # Format the result
-    if result == int(result):
-        return int(result)
-    else:
-        return round(result, 2)
+    return format_result(result)
 
 def calc_simple(expression):
     expression = expression.strip()
