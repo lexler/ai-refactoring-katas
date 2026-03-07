@@ -42,7 +42,6 @@ def format_result(result):
 def evaluate_expression(expression):
     expression = expression.strip()
 
-    # Handle comma-separated operations (precedence)
     if ', ' in expression:
         parts = expression.split(', ')
         left = parts[0]
@@ -53,7 +52,6 @@ def evaluate_expression(expression):
                 right_val = parse_number(rest[len(op_name) + 1:])
                 return op_func(left_val, right_val)
 
-    # Try to parse the expression
     for op_name, op_func in OPERATORS.items():
         separator = f' {op_name} '
         if separator in expression:
@@ -62,7 +60,6 @@ def evaluate_expression(expression):
             num2 = parse_number(parts[1].strip())
             return op_func(num1, num2)
     else:
-        # Might be just a number
         return parse_number(expression)
 
 calc_simple = evaluate_expression
