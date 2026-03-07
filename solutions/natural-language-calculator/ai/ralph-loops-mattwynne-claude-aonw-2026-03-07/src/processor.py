@@ -12,10 +12,7 @@ OPERATORS = {
 RESULT_PREFIX = 'the result of '
 
 def normalize_line(line):
-    line = line.lower()
-    if line.startswith(RESULT_PREFIX):
-        line = line[len(RESULT_PREFIX):]
-    return line
+    return line.lower()
 
 def process_line(line):
     line = normalize_line(line)
@@ -28,6 +25,8 @@ def format_result(result):
 
 def evaluate_expression(expression):
     expression = expression.strip()
+    if expression.startswith(RESULT_PREFIX):
+        expression = expression[len(RESULT_PREFIX):]
 
     for op_name, op_func in OPERATORS.items():
         for separator in [f', {op_name} {RESULT_PREFIX}', f' {op_name} {RESULT_PREFIX}']:
