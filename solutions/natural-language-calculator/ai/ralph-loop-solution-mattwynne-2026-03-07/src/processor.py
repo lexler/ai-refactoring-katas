@@ -17,68 +17,25 @@ def normalize_line(line):
         line = line[len(RESULT_PREFIX):]
     return line
 
+def find_nested_operation(line):
+    """Try to split line on a nested operation separator like ', plus the result of ' or ' minus the result of '.
+    Returns (left_str, right_str, operator_fn) or None if no nested operation found."""
+    for op_word, op_fn in OPERATORS.items():
+        for separator in [', ' + op_word + ' the result of ', ' ' + op_word + ' the result of ']:
+            if separator in line:
+                parts = line.split(separator)
+                return (parts[0], parts[1], op_fn)
+    return None
+
 def process_line(line):
     line = normalize_line(line)
 
-    # Check if it has nested result
-    if ', minus the result of ' in line or ', plus the result of ' in line or ', times the result of ' in line or ', divided by the result of ' in line or ' minus the result of ' in line or ' plus the result of ' in line or ' times the result of ' in line or ' divided by the result of ' in line:
-        # Handle nested operations
-        if ', minus the result of ' in line:
-            parts = line.split(', minus the result of ')
-            left = parts[0]
-            right = parts[1]
-            left_val = calc_simple(left)
-            right_val = calc_simple(right)
-            result = left_val - right_val
-        elif ' minus the result of ' in line:
-            parts = line.split(' minus the result of ')
-            left = parts[0]
-            right = parts[1]
-            left_val = calc_simple(left)
-            right_val = calc_simple(right)
-            result = left_val - right_val
-        elif ', plus the result of ' in line:
-            parts = line.split(', plus the result of ')
-            left = parts[0]
-            right = parts[1]
-            left_val = calc_simple(left)
-            right_val = calc_simple(right)
-            result = left_val + right_val
-        elif ' plus the result of ' in line:
-            parts = line.split(' plus the result of ')
-            left = parts[0]
-            right = parts[1]
-            left_val = calc_simple(left)
-            right_val = calc_simple(right)
-            result = left_val + right_val
-        elif ', times the result of ' in line:
-            parts = line.split(', times the result of ')
-            left = parts[0]
-            right = parts[1]
-            left_val = calc_simple(left)
-            right_val = calc_simple(right)
-            result = left_val * right_val
-        elif ' times the result of ' in line:
-            parts = line.split(' times the result of ')
-            left = parts[0]
-            right = parts[1]
-            left_val = calc_simple(left)
-            right_val = calc_simple(right)
-            result = left_val * right_val
-        elif ', divided by the result of ' in line:
-            parts = line.split(', divided by the result of ')
-            left = parts[0]
-            right = parts[1]
-            left_val = calc_simple(left)
-            right_val = calc_simple(right)
-            result = left_val / right_val
-        elif ' divided by the result of ' in line:
-            parts = line.split(' divided by the result of ')
-            left = parts[0]
-            right = parts[1]
-            left_val = calc_simple(left)
-            right_val = calc_simple(right)
-            result = left_val / right_val
+    nested = find_nested_operation(line)
+    if nested:
+        left_str, right_str, op_fn = nested
+        left_val = calc_simple(left_str)
+        right_val = calc_simple(right_str)
+        result = op_fn(left_val, right_val)
     else:
         # Simple operation
         result = calc_simple(line)
