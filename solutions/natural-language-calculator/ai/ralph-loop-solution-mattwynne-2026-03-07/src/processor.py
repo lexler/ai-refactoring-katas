@@ -1,4 +1,13 @@
+import operator
+
 from utils import get_num
+
+OPERATORS = {
+    'plus': operator.add,
+    'minus': operator.sub,
+    'times': operator.mul,
+    'divided by': operator.truediv,
+}
 
 RESULT_PREFIX = 'the result of '
 
@@ -89,41 +98,20 @@ def calc_simple(expression):
         left = parts[0]
         rest = parts[1]
         left_val = calc_simple(left)
-        # Now parse the rest to see what operation
-        if rest.startswith('minus '):
-            right_val = get_num(rest[6:])
-            return left_val - right_val
-        elif rest.startswith('plus '):
-            right_val = get_num(rest[5:])
-            return left_val + right_val
-        elif rest.startswith('times '):
-            right_val = get_num(rest[6:])
-            return left_val * right_val
-        elif rest.startswith('divided by '):
-            right_val = get_num(rest[11:])
-            return left_val / right_val
+        for op_word, op_fn in OPERATORS.items():
+            prefix = op_word + ' '
+            if rest.startswith(prefix):
+                right_val = get_num(rest[len(prefix):])
+                return op_fn(left_val, right_val)
 
-    # Try to parse the expression
-    if ' plus ' in expression:
-        parts = expression.split(' plus ')
-        num1 = get_num(parts[0].strip())
-        num2 = get_num(parts[1].strip())
-        return num1 + num2
-    elif ' minus ' in expression:
-        parts = expression.split(' minus ')
-        num1 = get_num(parts[0].strip())
-        num2 = get_num(parts[1].strip())
-        return num1 - num2
-    elif ' times ' in expression:
-        parts = expression.split(' times ')
-        num1 = get_num(parts[0].strip())
-        num2 = get_num(parts[1].strip())
-        return num1 * num2
-    elif ' divided by ' in expression:
-        parts = expression.split(' divided by ')
-        num1 = get_num(parts[0].strip())
-        num2 = get_num(parts[1].strip())
-        return num1 / num2
-    else:
-        # Might be just a number
-        return get_num(expression)
+    # Try to parse as "X <operator> Y"
+    for op_word, op_fn in OPERATORS.items():
+        separator = ' ' + op_word + ' '
+        if separator in expression:
+            parts = expression.split(separator)
+            num1 = get_num(parts[0].strip())
+            num2 = get_num(parts[1].strip())
+            return op_fn(num1, num2)
+
+    # Might be just a number
+    return get_num(expression)
