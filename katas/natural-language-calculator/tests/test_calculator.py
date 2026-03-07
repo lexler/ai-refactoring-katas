@@ -6,7 +6,7 @@ from unittest.mock import patch
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 from processor import process_line, calc_simple
-from utils import get_num
+from number_parser import parse_number_word
 from natural_language_calculator import main
 
 
@@ -15,34 +15,34 @@ class TestGetNum(unittest.TestCase):
 
     def test_word_numbers(self):
         """Test that word numbers convert correctly."""
-        self.assertEqual(get_num('zero'), 0)
-        self.assertEqual(get_num('one'), 1)
-        self.assertEqual(get_num('five'), 5)
-        self.assertEqual(get_num('ten'), 10)
+        self.assertEqual(parse_number_word('zero'), 0)
+        self.assertEqual(parse_number_word('one'), 1)
+        self.assertEqual(parse_number_word('five'), 5)
+        self.assertEqual(parse_number_word('ten'), 10)
 
     def test_word_numbers_case_insensitive(self):
         """Test that word numbers work regardless of case."""
-        self.assertEqual(get_num('One'), 1)
-        self.assertEqual(get_num('FIVE'), 5)
-        self.assertEqual(get_num('TEN'), 10)
+        self.assertEqual(parse_number_word('One'), 1)
+        self.assertEqual(parse_number_word('FIVE'), 5)
+        self.assertEqual(parse_number_word('TEN'), 10)
 
     def test_digit_strings(self):
         """Test that digit strings convert correctly."""
-        self.assertEqual(get_num('0'), 0)
-        self.assertEqual(get_num('5'), 5)
-        self.assertEqual(get_num('10'), 10)
+        self.assertEqual(parse_number_word('0'), 0)
+        self.assertEqual(parse_number_word('5'), 5)
+        self.assertEqual(parse_number_word('10'), 10)
 
     def test_whitespace_handling(self):
         """Test that leading/trailing whitespace is handled."""
-        self.assertEqual(get_num('  five  '), 5)
-        self.assertEqual(get_num('\ttwo\n'), 2)
+        self.assertEqual(parse_number_word('  five  '), 5)
+        self.assertEqual(parse_number_word('\ttwo\n'), 2)
 
     def test_invalid_word_raises_error(self):
         """Test that invalid words raise an error."""
         with self.assertRaises(ValueError):
-            get_num('eleven')
+            parse_number_word('eleven')
         with self.assertRaises(ValueError):
-            get_num('abc')
+            parse_number_word('abc')
 
 
 class TestCalcSimple(unittest.TestCase):

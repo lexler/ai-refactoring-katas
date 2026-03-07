@@ -12,7 +12,7 @@ WORD_TO_NUMBER = {
     'ten': 10,
 }
 
-def get_num(word):
+def parse_number_word(word):
     word = word.strip().lower()
 
     if word in WORD_TO_NUMBER:

@@ -15,7 +15,7 @@ Here's the flow:
 3. If there are yaks, find the next leaf yak that is not done. Mark it wip with `yx start "<name>"`.
 4. Do the work.
 5. Mark it done: `yx done "<name>"`
-6. Commit using: `bin/commit "your descriptive message here"` — this runs the tests first and only commits if they pass.
+6. Commit using: `bin/commit "your descriptive message here"` — this runs the tests first and only commits if they pass. Remember to describe your intention and thinking in the body of the commit message.
 7. Update the yak map, adding any additional context or yaks that you've discovered.
 
 Only do ONE leaf yak per run. Keep changes small and safe.

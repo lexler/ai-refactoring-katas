@@ -1,6 +1,6 @@
 import operator
 
-from utils import get_num
+from number_parser import parse_number_word
 
 OPERATORS = {
     'plus': operator.add,
@@ -65,7 +65,7 @@ def calc_simple(expression):
         for op_word, op_fn in OPERATORS.items():
             prefix = op_word + ' '
             if rest.startswith(prefix):
-                right_val = get_num(rest[len(prefix):])
+                right_val = parse_number_word(rest[len(prefix):])
                 return op_fn(left_val, right_val)
 
     # Try to parse as "X <operator> Y" (split only on first occurrence,
@@ -74,9 +74,9 @@ def calc_simple(expression):
         separator = ' ' + op_word + ' '
         if separator in expression:
             parts = expression.split(separator, 1)
-            num1 = get_num(parts[0].strip())
+            num1 = parse_number_word(parts[0].strip())
             num2 = calc_simple(parts[1].strip())
             return op_fn(num1, num2)
 
     # Might be just a number
-    return get_num(expression)
+    return parse_number_word(expression)
