@@ -7,7 +7,7 @@ from processor import process_line
 def main(input_file=None):
     if input_file is None:
         if len(sys.argv) < 2:
-            print("Error")
+            print("Usage: python natural_language_calculator.py <input_file>")
             return 1
         input_file = sys.argv[1]
 
@@ -15,7 +15,7 @@ def main(input_file=None):
         with open(input_file, 'r') as f:
             lines = f.readlines()
     except:
-        print("Error")
+        print(f"Error: could not read input file '{input_file}'")
         return 1
 
     results = []
@@ -26,7 +26,7 @@ def main(input_file=None):
                 result = process_line(line)
                 results.append(result)
             except:
-                print("Error")
+                print(f"Error: could not process expression '{line}'")
                 return 1
 
     output_file = input_file.replace('.txt', '_results.txt')
@@ -35,7 +35,7 @@ def main(input_file=None):
             for r in results:
                 f.write(str(r) + '\n')
     except:
-        print("Error")
+        print(f"Error: could not write output file '{output_file}'")
         return 1
 
     print(f"Results written to {output_file}")
