@@ -4,3 +4,7 @@ inputs:
     inputs:
       nixpkgs:
         follows: nixpkgs
+  yaks:
+    url: github:mattwynne/yaks
+  llm-agents:
+    url: github:numtide/llm-agents.nix
