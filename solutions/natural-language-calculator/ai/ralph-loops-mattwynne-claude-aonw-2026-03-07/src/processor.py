@@ -43,7 +43,7 @@ def evaluate_expression(expression):
         left_val = evaluate_expression(left)
         for op_name, op_func in OPERATORS.items():
             if rest.startswith(op_name + ' '):
-                right_val = parse_number(rest[len(op_name) + 1:])
+                right_val = evaluate_expression(rest[len(op_name) + 1:])
                 return op_func(left_val, right_val)
 
     for op_name, op_func in OPERATORS.items():
