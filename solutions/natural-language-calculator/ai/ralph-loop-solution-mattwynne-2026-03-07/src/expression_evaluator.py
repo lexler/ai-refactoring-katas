@@ -67,6 +67,16 @@ def apply_comma_precedence(expression):
             return op_fn(left_val, right_val)
     return None
 
+def evaluate_binary_operation(expression):
+    for op_word, op_fn in OPERATORS.items():
+        separator = ' ' + op_word + ' '
+        if separator in expression:
+            parts = expression.split(separator, 1)
+            left = parse_number_word(parts[0].strip())
+            right = evaluate_simple_expression(parts[1].strip())
+            return op_fn(left, right)
+    return None
+
 def evaluate_simple_expression(expression):
     expression = expression.strip()
 
@@ -74,15 +84,8 @@ def evaluate_simple_expression(expression):
     if result is not None:
         return result
 
-    # Try to parse as "X <operator> Y" (split only on first occurrence,
-    # recursively evaluate the right-hand side for chained operations)
-    for op_word, op_fn in OPERATORS.items():
-        separator = ' ' + op_word + ' '
-        if separator in expression:
-            parts = expression.split(separator, 1)
-            num1 = parse_number_word(parts[0].strip())
-            num2 = evaluate_simple_expression(parts[1].strip())
-            return op_fn(num1, num2)
+    result = evaluate_binary_operation(expression)
+    if result is not None:
+        return result
 
-    # Might be just a number
     return parse_number_word(expression)
