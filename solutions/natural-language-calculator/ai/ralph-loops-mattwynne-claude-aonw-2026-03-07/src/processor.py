@@ -19,20 +19,7 @@ def normalize_line(line):
 
 def process_line(line):
     line = normalize_line(line)
-    result = evaluate_nested_expression(line)
-    if result is None:
-        result = evaluate_expression(line)
-    return format_result(result)
-
-def evaluate_nested_expression(line):
-    for op_name, op_func in OPERATORS.items():
-        for separator in [f', {op_name} the result of ', f' {op_name} the result of ']:
-            if separator in line:
-                parts = line.split(separator)
-                left_val = evaluate_expression(parts[0])
-                right_val = evaluate_expression(parts[1])
-                return op_func(left_val, right_val)
-    return None
+    return format_result(evaluate_expression(line))
 
 def format_result(result):
     if result == int(result):
@@ -41,6 +28,14 @@ def format_result(result):
 
 def evaluate_expression(expression):
     expression = expression.strip()
+
+    for op_name, op_func in OPERATORS.items():
+        for separator in [f', {op_name} {RESULT_PREFIX}', f' {op_name} {RESULT_PREFIX}']:
+            if separator in expression:
+                parts = expression.split(separator)
+                left_val = evaluate_expression(parts[0])
+                right_val = evaluate_expression(parts[1])
+                return op_func(left_val, right_val)
 
     if ', ' in expression:
         parts = expression.split(', ')
