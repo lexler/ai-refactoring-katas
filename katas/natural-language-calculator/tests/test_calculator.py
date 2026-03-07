@@ -73,6 +73,13 @@ class TestCalcSimple(unittest.TestCase):
         self.assertEqual(calc_simple('five'), 5)
         self.assertEqual(calc_simple('10'), 10)
 
+    def test_chained_operations(self):
+        """Test that chained operations evaluate left-to-right."""
+        # "one plus two plus three" = 1 + (2 + 3) = 6
+        self.assertEqual(calc_simple('one plus two plus three'), 6)
+        # "ten minus three minus two" = 10 - (3 - 2) = 9
+        self.assertEqual(calc_simple('ten minus three minus two'), 9)
+
     def test_precedence_with_comma(self):
         """Test that comma creates precedence (calculates left side first)."""
         # "four plus one, minus five" means "(4 + 1) - 5" = 0

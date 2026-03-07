@@ -68,13 +68,14 @@ def calc_simple(expression):
                 right_val = get_num(rest[len(prefix):])
                 return op_fn(left_val, right_val)
 
-    # Try to parse as "X <operator> Y"
+    # Try to parse as "X <operator> Y" (split only on first occurrence,
+    # recursively evaluate the right-hand side for chained operations)
     for op_word, op_fn in OPERATORS.items():
         separator = ' ' + op_word + ' '
         if separator in expression:
-            parts = expression.split(separator)
+            parts = expression.split(separator, 1)
             num1 = get_num(parts[0].strip())
-            num2 = get_num(parts[1].strip())
+            num2 = calc_simple(parts[1].strip())
             return op_fn(num1, num2)
 
     # Might be just a number
