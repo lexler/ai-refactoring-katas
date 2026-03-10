@@ -1,0 +1,6 @@
+# devenv/direnv
+.devenv/
+.direnv/
+devenv.local.nix
+.devenv.flake.nix
+.devenv.flake.lock
