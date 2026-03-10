@@ -1,0 +1,90 @@
+From 8a3a47ab837bd41d963112f34660699cc611c7c3 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:33:49 -0800
+Subject: [PATCH 46/56] - r Replace mock-based write error test with real
+ filesystem permissions test
+
+---
+ .../tests/test_calculator.py                  | 26 -------------------
+ .../tests/test_file_operations.py             | 17 ++++++++++++
+ 2 files changed, 17 insertions(+), 26 deletions(-)
+
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index 4b890a9..cec7944 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -1,14 +1,11 @@
+ import os
+ import sys
+-import tempfile
+ import unittest
+-from unittest.mock import mock_open, patch
+ 
+ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+ 
+ from calculator import calculate, evaluate_expression
+ from number_words import parse_number
+-from natural_language_calculator import main
+ 
+ 
+ class TestParseNumber(unittest.TestCase):
+@@ -145,28 +142,5 @@ class TestCalculate(unittest.TestCase):
+         self.assertEqual(calculate('five divided by five'), 1)
+ 
+ 
+-class TestMain(unittest.TestCase):
+-
+-    def test_main_write_error(self):
+-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+-            f.write('one plus one\n')
+-            input_file = f.name
+-
+-        try:
+-            read_mock = mock_open(read_data='one plus one\n')
+-
+-            def open_side_effect(filename, mode):
+-                if mode == 'r':
+-                    return read_mock(filename, mode)
+-                elif mode == 'w':
+-                    raise PermissionError()
+-
+-            with patch('builtins.open', side_effect=open_side_effect):
+-                result = main(input_file)
+-                self.assertEqual(result, 1)
+-        finally:
+-            os.unlink(input_file)
+-
+-
+ if __name__ == '__main__':
+     unittest.main()
+diff --git a/katas/natural-language-calculator/tests/test_file_operations.py b/katas/natural-language-calculator/tests/test_file_operations.py
+index d210b4f..fc77b3d 100644
+--- a/katas/natural-language-calculator/tests/test_file_operations.py
++++ b/katas/natural-language-calculator/tests/test_file_operations.py
+@@ -233,6 +233,23 @@ def test_trailing_whitespace_in_expressions(test_dir):
+     assert lines == ['4', '6']
+ 
+ 
++def test_write_error(test_dir, capsys):
++    readonly_dir = os.path.join(test_dir, 'readonly')
++    os.makedirs(readonly_dir)
++    input_file = create_test_file(readonly_dir, 'test.txt', 'one plus one\n')
++    os.chmod(readonly_dir, 0o555)
++
++    try:
++        exit_code = main(input_file)
++
++        assert exit_code == 1
++
++        captured = capsys.readouterr()
++        assert 'Could not write' in captured.out
++    finally:
++        os.chmod(readonly_dir, 0o755)
++
++
+ def test_subprocess_integration(test_dir):
+     script_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'natural_language_calculator.py')
+     input_file = create_test_file(test_dir, 'subprocess_test.txt', 'one plus three\n')
+-- 
+2.39.5 (Apple Git-154)
+

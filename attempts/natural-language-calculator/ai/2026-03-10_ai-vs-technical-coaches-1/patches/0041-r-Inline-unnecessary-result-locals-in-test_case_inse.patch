@@ -1,0 +1,31 @@
+From 39e4cd1a3ad641a23e2f1616b7ec36cb1092a52f Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:21:03 -0800
+Subject: [PATCH 41/56] - r Inline unnecessary result locals in
+ test_case_insensitive
+
+---
+ katas/natural-language-calculator/tests/test_calculator.py | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index d3f3489..b5a1fe3 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -121,11 +121,8 @@ class TestCalculate(unittest.TestCase):
+         self.assertEqual(calculate('six plus four, divided by the result of one plus one'), 5)
+ 
+     def test_case_insensitive(self):
+-        result = calculate('ONE PLUS THREE')
+-        self.assertEqual(result, 4)
+-
+-        result = calculate('The Result Of Three Times Three, Divided By Two')
+-        self.assertEqual(result, 4.5)
++        self.assertEqual(calculate('ONE PLUS THREE'), 4)
++        self.assertEqual(calculate('The Result Of Three Times Three, Divided By Two'), 4.5)
+ 
+     def test_strips_result_of_prefix(self):
+         result1 = calculate('the result of one plus three')
+-- 
+2.39.5 (Apple Git-154)
+

@@ -1,0 +1,131 @@
+From 38448d8bc5b1bf58803fc63e817eff50ddb8382b Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:42:55 -0800
+Subject: [PATCH 04/56] - r Rename get_num to parse_number and WORD_TO_NUMBER
+ to NUMBER_WORDS
+
+---
+ .../src/processor.py                          |  8 ++---
+ .../natural-language-calculator/src/utils.py  |  8 ++---
+ .../tests/test_calculator.py                  | 30 +++++++++----------
+ 3 files changed, 23 insertions(+), 23 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/processor.py b/katas/natural-language-calculator/src/processor.py
+index f7ee0ff..07dcc9c 100644
+--- a/katas/natural-language-calculator/src/processor.py
++++ b/katas/natural-language-calculator/src/processor.py
+@@ -1,5 +1,5 @@
+ import operator
+-from utils import get_num
++from utils import parse_number
+ 
+ RESULT_PREFIX = 'the result of '
+ 
+@@ -57,7 +57,7 @@ def apply_comma_precedence(expression):
+     for op_name, op_func in OPERATIONS.items():
+         prefix = op_name + ' '
+         if rest.startswith(prefix):
+-            right_val = get_num(rest[len(prefix):])
++            right_val = parse_number(rest[len(prefix):])
+             return op_func(left_val, right_val)
+     return None
+ 
+@@ -77,6 +77,6 @@ def calc_simple(expression):
+     delimiter, op_func = find_operation(expression)
+     if delimiter:
+         parts = expression.split(delimiter)
+-        return op_func(get_num(parts[0]), get_num(parts[1]))
++        return op_func(parse_number(parts[0]), parse_number(parts[1]))
+ 
+-    return get_num(expression)
++    return parse_number(expression)
+diff --git a/katas/natural-language-calculator/src/utils.py b/katas/natural-language-calculator/src/utils.py
+index b8fce21..5d5ca3d 100644
+--- a/katas/natural-language-calculator/src/utils.py
++++ b/katas/natural-language-calculator/src/utils.py
+@@ -1,4 +1,4 @@
+-WORD_TO_NUMBER = {
++NUMBER_WORDS = {
+     'zero': 0,
+     'one': 1,
+     'two': 2,
+@@ -12,11 +12,11 @@ WORD_TO_NUMBER = {
+     'ten': 10,
+ }
+ 
+-def get_num(word):
++def parse_number(word):
+     word = word.strip().lower()
+ 
+-    if word in WORD_TO_NUMBER:
+-        return WORD_TO_NUMBER[word]
++    if word in NUMBER_WORDS:
++        return NUMBER_WORDS[word]
+ 
+     try:
+         return int(word)
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index 05dadd7..07d0eb9 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -6,7 +6,7 @@ from unittest.mock import patch
+ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+ 
+ from processor import process_line, calc_simple
+-from utils import get_num
++from utils import parse_number
+ from natural_language_calculator import main
+ 
+ 
+@@ -15,34 +15,34 @@ class TestGetNum(unittest.TestCase):
+ 
+     def test_word_numbers(self):
+         """Test that word numbers convert correctly."""
+-        self.assertEqual(get_num('zero'), 0)
+-        self.assertEqual(get_num('one'), 1)
+-        self.assertEqual(get_num('five'), 5)
+-        self.assertEqual(get_num('ten'), 10)
++        self.assertEqual(parse_number('zero'), 0)
++        self.assertEqual(parse_number('one'), 1)
++        self.assertEqual(parse_number('five'), 5)
++        self.assertEqual(parse_number('ten'), 10)
+ 
+     def test_word_numbers_case_insensitive(self):
+         """Test that word numbers work regardless of case."""
+-        self.assertEqual(get_num('One'), 1)
+-        self.assertEqual(get_num('FIVE'), 5)
+-        self.assertEqual(get_num('TEN'), 10)
++        self.assertEqual(parse_number('One'), 1)
++        self.assertEqual(parse_number('FIVE'), 5)
++        self.assertEqual(parse_number('TEN'), 10)
+ 
+     def test_digit_strings(self):
+         """Test that digit strings convert correctly."""
+-        self.assertEqual(get_num('0'), 0)
+-        self.assertEqual(get_num('5'), 5)
+-        self.assertEqual(get_num('10'), 10)
++        self.assertEqual(parse_number('0'), 0)
++        self.assertEqual(parse_number('5'), 5)
++        self.assertEqual(parse_number('10'), 10)
+ 
+     def test_whitespace_handling(self):
+         """Test that leading/trailing whitespace is handled."""
+-        self.assertEqual(get_num('  five  '), 5)
+-        self.assertEqual(get_num('\ttwo\n'), 2)
++        self.assertEqual(parse_number('  five  '), 5)
++        self.assertEqual(parse_number('\ttwo\n'), 2)
+ 
+     def test_invalid_word_raises_error(self):
+         """Test that invalid words raise an error."""
+         with self.assertRaises(ValueError):
+-            get_num('eleven')
++            parse_number('eleven')
+         with self.assertRaises(ValueError):
+-            get_num('abc')
++            parse_number('abc')
+ 
+ 
+ class TestCalcSimple(unittest.TestCase):
+-- 
+2.39.5 (Apple Git-154)
+

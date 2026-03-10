@@ -1,0 +1,26 @@
+From 9bafc32e41c9b8af90f65f9e583141e7831f7970 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:47:38 -0800
+Subject: [PATCH 14/56] - r Replace silent None return with ValueError in
+ apply_comma_precedence
+
+---
+ katas/natural-language-calculator/src/processor.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/katas/natural-language-calculator/src/processor.py b/katas/natural-language-calculator/src/processor.py
+index d2b809b..6141dc3 100644
+--- a/katas/natural-language-calculator/src/processor.py
++++ b/katas/natural-language-calculator/src/processor.py
+@@ -56,7 +56,7 @@ def apply_comma_precedence(expression):
+         if rest.startswith(prefix):
+             right_val = parse_number(rest[len(prefix):])
+             return op_func(left_val, right_val)
+-    return None
++    raise ValueError(f"Unknown operation after comma: '{rest}'")
+ 
+ def find_operation(expression):
+     for op_name, op_func in OPERATIONS.items():
+-- 
+2.39.5 (Apple Git-154)
+

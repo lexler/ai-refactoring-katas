@@ -1,0 +1,26 @@
+From be52f04dd745e60a19fcde752872ee9088beb997 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:23:50 -0800
+Subject: [PATCH 43/56] - r Remove dead main.py stub unreferenced by run.sh or
+ tests
+
+---
+ katas/natural-language-calculator/main.py | 6 ------
+ 1 file changed, 6 deletions(-)
+ delete mode 100644 katas/natural-language-calculator/main.py
+
+diff --git a/katas/natural-language-calculator/main.py b/katas/natural-language-calculator/main.py
+deleted file mode 100644
+index cb85170..0000000
+--- a/katas/natural-language-calculator/main.py
++++ /dev/null
+@@ -1,6 +0,0 @@
+-def main():
+-    print("Hello from natural-language-calculator!")
+-
+-
+-if __name__ == "__main__":
+-    main()
+-- 
+2.39.5 (Apple Git-154)
+

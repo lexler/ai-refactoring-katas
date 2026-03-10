@@ -1,0 +1,38 @@
+From 9897e3b98c9cc64010dc4d099a8bf92bdfbffaf8 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:58:34 -0800
+Subject: [PATCH 26/56] - r Extract evaluate_simple_operation to match compound
+ pattern
+
+---
+ katas/natural-language-calculator/src/calculator.py | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/calculator.py b/katas/natural-language-calculator/src/calculator.py
+index 235b46c..44a5b45 100644
+--- a/katas/natural-language-calculator/src/calculator.py
++++ b/katas/natural-language-calculator/src/calculator.py
+@@ -73,6 +73,11 @@ def find_simple_operation(expression):
+     return None, None
+ 
+ 
++def evaluate_simple_operation(expression, delimiter, op_func):
++    parts = expression.split(delimiter)
++    return op_func(parse_number(parts[0]), parse_number(parts[1]))
++
++
+ def evaluate_expression(expression):
+     expression = expression.strip()
+ 
+@@ -81,7 +86,6 @@ def evaluate_expression(expression):
+ 
+     delimiter, op_func = find_simple_operation(expression)
+     if delimiter:
+-        parts = expression.split(delimiter)
+-        return op_func(parse_number(parts[0]), parse_number(parts[1]))
++        return evaluate_simple_operation(expression, delimiter, op_func)
+ 
+     return parse_number(expression)
+-- 
+2.39.5 (Apple Git-154)
+

@@ -1,0 +1,86 @@
+From e56532f86f258072e602a546c6c973e3ff9edb50 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:50:00 -0800
+Subject: [PATCH 16/56] - r Normalize PEP 8 two blank lines between top-level
+ definitions
+
+---
+ katas/natural-language-calculator/src/processor.py | 8 ++++++++
+ katas/natural-language-calculator/src/utils.py     | 1 +
+ 2 files changed, 9 insertions(+)
+
+diff --git a/katas/natural-language-calculator/src/processor.py b/katas/natural-language-calculator/src/processor.py
+index 6141dc3..a6e7d23 100644
+--- a/katas/natural-language-calculator/src/processor.py
++++ b/katas/natural-language-calculator/src/processor.py
+@@ -16,26 +16,31 @@ NESTED_DELIMITERS = [
+     for sep in (', ', ' ')
+ ]
+ 
++
+ def normalize_line(line):
+     return line.lower().removeprefix(RESULT_PREFIX)
+ 
++
+ def find_nested_operation(line):
+     for delimiter, op_func in NESTED_DELIMITERS:
+         if delimiter in line:
+             return delimiter, op_func
+     return None, None
+ 
++
+ def apply_nested_operation(line, delimiter, op_func):
+     parts = line.split(delimiter)
+     left_val = evaluate_expression(parts[0])
+     right_val = evaluate_expression(parts[1])
+     return op_func(left_val, right_val)
+ 
++
+ def format_result(result):
+     if result == int(result):
+         return int(result)
+     return round(result, 2)
+ 
++
+ def process_line(line):
+     line = normalize_line(line)
+ 
+@@ -47,6 +52,7 @@ def process_line(line):
+ 
+     return format_result(result)
+ 
++
+ def apply_comma_precedence(expression):
+     parts = expression.split(', ')
+     left_val = evaluate_expression(parts[0])
+@@ -58,6 +64,7 @@ def apply_comma_precedence(expression):
+             return op_func(left_val, right_val)
+     raise ValueError(f"Unknown operation after comma: '{rest}'")
+ 
++
+ def find_operation(expression):
+     for op_name, op_func in OPERATIONS.items():
+         delimiter = f' {op_name} '
+@@ -65,6 +72,7 @@ def find_operation(expression):
+             return delimiter, op_func
+     return None, None
+ 
++
+ def evaluate_expression(expression):
+     expression = expression.strip()
+ 
+diff --git a/katas/natural-language-calculator/src/utils.py b/katas/natural-language-calculator/src/utils.py
+index 146e8af..9ecfa00 100644
+--- a/katas/natural-language-calculator/src/utils.py
++++ b/katas/natural-language-calculator/src/utils.py
+@@ -12,6 +12,7 @@ NUMBER_WORDS = {
+     'ten': 10,
+ }
+ 
++
+ def parse_number(word):
+     word = word.strip().lower()
+ 
+-- 
+2.39.5 (Apple Git-154)
+

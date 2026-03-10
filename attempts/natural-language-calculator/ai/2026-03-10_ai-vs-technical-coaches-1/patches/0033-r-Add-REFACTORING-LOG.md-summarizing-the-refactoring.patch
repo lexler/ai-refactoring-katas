@@ -1,0 +1,86 @@
+From ae6cfbadb1ded979f120dd020973566cae5d2d61 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:13:12 -0800
+Subject: [PATCH 33/56] - r Add REFACTORING-LOG.md summarizing the refactoring
+ journey
+
+---
+ .../REFACTORING-LOG.md                        | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+ create mode 100644 katas/natural-language-calculator/REFACTORING-LOG.md
+
+diff --git a/katas/natural-language-calculator/REFACTORING-LOG.md b/katas/natural-language-calculator/REFACTORING-LOG.md
+new file mode 100644
+index 0000000..cfb7f4c
+--- /dev/null
++++ b/katas/natural-language-calculator/REFACTORING-LOG.md
+@@ -0,0 +1,66 @@
++# Refactoring Log
++
++## What was refactored
++
++### Phase 1 — Structural cleanup
++
++The original `processor.py` contained 8 nearly identical branches handling nested expressions (`plus the result of`, `minus the result of`, etc.) with and without comma separators. Each branch duplicated the same split-evaluate-combine pattern.
++
++This was replaced with a data-driven approach: an `OPERATIONS` dictionary maps operation names to `operator` functions, and a `COMPOUND_OPERATIONS` list is generated from it. The 8 branches collapsed into a single loop + one `evaluate_compound_operation` function.
++
++The same pattern was applied to simple operations (`calc_simple` had 4 duplicated branches), reducing them to a single `find_simple_operation` + `evaluate_simple_operation` pair.
++
++Before:
++```
++if ' plus the result of ' in expression:
++    parts = expression.split(' plus the result of ')
++    left = evaluate_expression(parts[0])
++    right = evaluate_expression(parts[1])
++    return left + right
++elif ', plus the result of ' in expression:
++    ...  # same thing, 6 more times
++```
++
++After:
++```
++delimiter, op_func = find_compound_operation(expression)
++if delimiter:
++    return evaluate_compound_operation(expression, delimiter, op_func)
++```
++
++### Phase 1 — File and function renaming
++
++- `processor.py` -> `calculator.py` (domain name, not role)
++- `utils.py` -> `number_words.py` (says what it contains)
++- Functions renamed to domain language: `process` -> `calculate`, `calc_simple` -> `evaluate_simple_operation`, `calc_nested` -> `evaluate_compound_operation`
++
++### Phase 1 — Silent failure fix
++
++`apply_comma_precedence` returned `None` when no operation matched after the comma. This caused a confusing `TypeError` in `format_result`. Replaced with an explicit `ValueError`.
++
++### Phase 2 — Lens passes
++
++- Formatting: PEP 8 blank lines between top-level definitions, import ordering
++- Naming: Parameters renamed from implementation terms (`line`) to domain terms (`expression`)
++- Abstraction consistency: Aligned sibling functions — compound and simple operations both follow the same find/evaluate pattern
++- Duplication (tests): Removed `TestCompleteExamples` that re-tested the same expressions already covered by unit tests, removed redundant `assertIsInstance` checks
++- Cohesion (tests): Folded `TestEdgeCases` into `TestCalculate` — it was named by exclusion rather than by what it tested
++- Error handling: Replaced generic `"Error"` messages in `main()` with context-specific messages (`"Could not read"`, `"Invalid expression"`, `"Could not write"`)
++- Outside the box (tests): Fixed import order in `test_file_operations.py`, replaced manual temp directory management in `test_subprocess_integration` with the shared `test_dir` fixture
++
++
++## Current problems
++
++- `output_filepath` uses `str.replace('.txt', '_results.txt')` which breaks if the input path contains `.txt` elsewhere (e.g., `data.txt.bak/input.txt` would produce `data_results.txt.bak/input_results.txt`)
++- Division by zero is unhandled — `calculate('five divided by zero')` raises an uncontrolled `ZeroDivisionError`
++- The string-splitting parser is fragile: `split(' plus ')` would misparse an expression containing a word like "surplus" if number words were extended
++- Both test files use `sys.path.insert` to find the `src` directory — this is a workaround for missing package structure
++
++
++## Future improvements
++
++- Use `pathlib` for file path manipulation — `Path.stem` and `Path.with_stem()` would make output naming robust
++- Add a proper Python package with `__init__.py` so tests can import without `sys.path` hacking
++- Handle division by zero with a clear error message
++- Support numbers beyond zero-ten (eleven through twenty, hundred, thousand, etc.)
++- Consider a recursive descent parser if the expression grammar grows — string splitting becomes increasingly fragile with more operators or nesting levels
+-- 
+2.39.5 (Apple Git-154)
+

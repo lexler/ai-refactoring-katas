@@ -1,0 +1,39 @@
+From 6a5fd16bdc5da049ca560c4d58adf39698c51e53 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:17:37 -0800
+Subject: [PATCH 37/56] - r Remove mock-based TestMain tests duplicated by
+ test_file_operations
+
+---
+ .../tests/test_calculator.py                      | 15 ---------------
+ 1 file changed, 15 deletions(-)
+
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index 706592e..d3f3489 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -150,21 +150,6 @@ class TestCalculate(unittest.TestCase):
+ 
+ class TestMain(unittest.TestCase):
+ 
+-    @patch('sys.argv', ['natural_language_calculator.py'])
+-    def test_main_with_no_arguments(self):
+-        result = main()
+-        self.assertEqual(result, 1)
+-
+-    @patch('sys.argv', ['natural_language_calculator.py', 'test_input.txt'])
+-    @patch('builtins.open')
+-    def test_main_with_sys_argv(self, mock_open):
+-        mock_read = mock_open(read_data='one plus one\n')
+-        mock_write = mock_open()
+-        mock_open.side_effect = [mock_read.return_value, mock_write.return_value]
+-
+-        result = main()
+-        self.assertEqual(result, 0)
+-
+     def test_main_write_error(self):
+         with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+             f.write('one plus one\n')
+-- 
+2.39.5 (Apple Git-154)
+

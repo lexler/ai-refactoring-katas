@@ -1,0 +1,43 @@
+From 3e7c51e3abed3e42039bdd8c2aa8f688e3f46610 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:53:05 -0800
+Subject: [PATCH 19/56] - r Rename utils.py to number_words.py
+
+---
+ .../src/{utils.py => number_words.py}                           | 0
+ katas/natural-language-calculator/src/processor.py              | 2 +-
+ katas/natural-language-calculator/tests/test_calculator.py      | 2 +-
+ 3 files changed, 2 insertions(+), 2 deletions(-)
+ rename katas/natural-language-calculator/src/{utils.py => number_words.py} (100%)
+
+diff --git a/katas/natural-language-calculator/src/utils.py b/katas/natural-language-calculator/src/number_words.py
+similarity index 100%
+rename from katas/natural-language-calculator/src/utils.py
+rename to katas/natural-language-calculator/src/number_words.py
+diff --git a/katas/natural-language-calculator/src/processor.py b/katas/natural-language-calculator/src/processor.py
+index a6e7d23..0227967 100644
+--- a/katas/natural-language-calculator/src/processor.py
++++ b/katas/natural-language-calculator/src/processor.py
+@@ -1,5 +1,5 @@
+ import operator
+-from utils import parse_number
++from number_words import parse_number
+ 
+ RESULT_PREFIX = 'the result of '
+ 
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index 69b40b9..b81450d 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -7,7 +7,7 @@ from unittest.mock import mock_open, patch
+ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+ 
+ from processor import process_line, evaluate_expression
+-from utils import parse_number
++from number_words import parse_number
+ from natural_language_calculator import main
+ 
+ 
+-- 
+2.39.5 (Apple Git-154)
+

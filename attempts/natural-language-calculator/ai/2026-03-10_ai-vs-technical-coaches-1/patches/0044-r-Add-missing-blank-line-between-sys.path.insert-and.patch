@@ -1,0 +1,25 @@
+From fd233d526d28876000a632c64ea509a2c2b8a34f Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:24:21 -0800
+Subject: [PATCH 44/56] - r Add missing blank line between sys.path.insert and
+ from-import
+
+---
+ katas/natural-language-calculator/tests/test_file_operations.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/katas/natural-language-calculator/tests/test_file_operations.py b/katas/natural-language-calculator/tests/test_file_operations.py
+index e272bf5..d210b4f 100644
+--- a/katas/natural-language-calculator/tests/test_file_operations.py
++++ b/katas/natural-language-calculator/tests/test_file_operations.py
+@@ -7,6 +7,7 @@ import tempfile
+ import pytest
+ 
+ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
++
+ from natural_language_calculator import main
+ 
+ 
+-- 
+2.39.5 (Apple Git-154)
+

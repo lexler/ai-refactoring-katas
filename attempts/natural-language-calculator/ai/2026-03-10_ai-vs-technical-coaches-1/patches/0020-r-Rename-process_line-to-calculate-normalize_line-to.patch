@@ -1,0 +1,224 @@
+From b9a855bc98c38a6c250a30cd8b18494da2806027 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:53:47 -0800
+Subject: [PATCH 20/56] - r Rename process_line to calculate, normalize_line to
+ normalize_expression
+
+---
+ .../src/natural_language_calculator.py        |  4 +-
+ .../src/processor.py                          |  6 +-
+ .../tests/test_calculator.py                  | 60 +++++++++----------
+ 3 files changed, 35 insertions(+), 35 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/natural_language_calculator.py b/katas/natural-language-calculator/src/natural_language_calculator.py
+index 8b4895a..890335d 100644
+--- a/katas/natural-language-calculator/src/natural_language_calculator.py
++++ b/katas/natural-language-calculator/src/natural_language_calculator.py
+@@ -1,6 +1,6 @@
+ import sys
+ 
+-from processor import process_line
++from processor import calculate
+ 
+ 
+ def read_expressions(filepath):
+@@ -9,7 +9,7 @@ def read_expressions(filepath):
+ 
+ 
+ def calculate_all(expressions):
+-    return [process_line(expr) for expr in expressions]
++    return [calculate(expr) for expr in expressions]
+ 
+ 
+ def write_results(filepath, results):
+diff --git a/katas/natural-language-calculator/src/processor.py b/katas/natural-language-calculator/src/processor.py
+index 0227967..ab044bb 100644
+--- a/katas/natural-language-calculator/src/processor.py
++++ b/katas/natural-language-calculator/src/processor.py
+@@ -17,7 +17,7 @@ NESTED_DELIMITERS = [
+ ]
+ 
+ 
+-def normalize_line(line):
++def normalize_expression(line):
+     return line.lower().removeprefix(RESULT_PREFIX)
+ 
+ 
+@@ -41,8 +41,8 @@ def format_result(result):
+     return round(result, 2)
+ 
+ 
+-def process_line(line):
+-    line = normalize_line(line)
++def calculate(line):
++    line = normalize_expression(line)
+ 
+     delimiter, op_func = find_nested_operation(line)
+     if delimiter:
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index b81450d..fbfe932 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -6,7 +6,7 @@ from unittest.mock import mock_open, patch
+ 
+ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+ 
+-from processor import process_line, evaluate_expression
++from processor import calculate, evaluate_expression
+ from number_words import parse_number
+ from natural_language_calculator import main
+ 
+@@ -76,113 +76,113 @@ class TestEvaluateExpression(unittest.TestCase):
+ class TestProcessLine(unittest.TestCase):
+ 
+     def test_simple_addition(self):
+-        result = process_line('one plus three')
++        result = calculate('one plus three')
+         self.assertEqual(result, 4)
+         self.assertIsInstance(result, int)
+ 
+     def test_simple_subtraction(self):
+-        result = process_line('eight minus two')
++        result = calculate('eight minus two')
+         self.assertEqual(result, 6)
+         self.assertIsInstance(result, int)
+ 
+     def test_division_with_decimal(self):
+-        result = process_line('three divided by nine')
++        result = calculate('three divided by nine')
+         self.assertEqual(result, 0.33)
+         self.assertIsInstance(result, float)
+ 
+     def test_division_returning_integer(self):
+-        result = process_line('six divided by two')
++        result = calculate('six divided by two')
+         self.assertEqual(result, 3)
+         self.assertIsInstance(result, int)
+ 
+     def test_nested_with_comma_minus(self):
+-        result = process_line('the result of four plus one, minus five')
++        result = calculate('the result of four plus one, minus five')
+         self.assertEqual(result, 0)
+         self.assertIsInstance(result, int)
+ 
+     def test_nested_with_comma_divided(self):
+-        result = process_line('The result of three times three, divided by two')
++        result = calculate('The result of three times three, divided by two')
+         self.assertEqual(result, 4.5)
+         self.assertIsInstance(result, float)
+ 
+     def test_nested_with_result_of_minus(self):
+         # "six times five minus the result of nine times two"
+         # = 30 - 18 = 12
+-        result = process_line('six times five minus the result of nine times two')
++        result = calculate('six times five minus the result of nine times two')
+         self.assertEqual(result, 12)
+         self.assertIsInstance(result, int)
+ 
+     def test_nested_both_sides(self):
+         # "result of ten plus three, minus result of one plus seven"
+         # = 13 - 8 = 5
+-        result = process_line('the result of ten plus three, minus the result of one plus seven')
++        result = calculate('the result of ten plus three, minus the result of one plus seven')
+         self.assertEqual(result, 5)
+         self.assertIsInstance(result, int)
+ 
+     def test_nested_both_sides_plus(self):
+-        result = process_line('the result of two plus three, plus the result of one plus four')
++        result = calculate('the result of two plus three, plus the result of one plus four')
+         self.assertEqual(result, 10)
+         self.assertIsInstance(result, int)
+ 
+     def test_nested_with_result_of_plus(self):
+-        result = process_line('six plus the result of two times three')
++        result = calculate('six plus the result of two times three')
+         self.assertEqual(result, 12)
+         self.assertIsInstance(result, int)
+ 
+     def test_nested_both_sides_times(self):
+-        result = process_line('the result of two plus three, times the result of one plus one')
++        result = calculate('the result of two plus three, times the result of one plus one')
+         self.assertEqual(result, 10)
+         self.assertIsInstance(result, int)
+ 
+     def test_nested_with_result_of_times(self):
+-        result = process_line('three times the result of two plus two')
++        result = calculate('three times the result of two plus two')
+         self.assertEqual(result, 12)
+         self.assertIsInstance(result, int)
+ 
+     def test_nested_with_result_of_divided(self):
+-        result = process_line('six divided by the result of one plus one')
++        result = calculate('six divided by the result of one plus one')
+         self.assertEqual(result, 3)
+         self.assertIsInstance(result, int)
+ 
+     def test_nested_both_sides_divided(self):
+-        result = process_line('the result of ten plus two, divided by the result of one plus one')
++        result = calculate('the result of ten plus two, divided by the result of one plus one')
+         self.assertEqual(result, 6)
+         self.assertIsInstance(result, int)
+ 
+     def test_comma_divided_nested(self):
+-        result = process_line('six plus four, divided by the result of one plus one')
++        result = calculate('six plus four, divided by the result of one plus one')
+         self.assertEqual(result, 5)
+         self.assertIsInstance(result, int)
+ 
+     def test_case_insensitive(self):
+-        result = process_line('ONE PLUS THREE')
++        result = calculate('ONE PLUS THREE')
+         self.assertEqual(result, 4)
+ 
+-        result = process_line('The Result Of Three Times Three, Divided By Two')
++        result = calculate('The Result Of Three Times Three, Divided By Two')
+         self.assertEqual(result, 4.5)
+ 
+     def test_strips_result_of_prefix(self):
+-        result1 = process_line('the result of one plus three')
+-        result2 = process_line('one plus three')
++        result1 = calculate('the result of one plus three')
++        result2 = calculate('one plus three')
+         self.assertEqual(result1, result2)
+ 
+ 
+ class TestEdgeCases(unittest.TestCase):
+ 
+     def test_zero_operations(self):
+-        self.assertEqual(process_line('zero plus five'), 5)
+-        self.assertEqual(process_line('ten minus zero'), 10)
+-        self.assertEqual(process_line('zero times five'), 0)
++        self.assertEqual(calculate('zero plus five'), 5)
++        self.assertEqual(calculate('ten minus zero'), 10)
++        self.assertEqual(calculate('zero times five'), 0)
+ 
+     def test_division_by_non_zero(self):
+-        self.assertEqual(process_line('ten divided by two'), 5)
+-        self.assertEqual(process_line('ten divided by three'), 3.33)
++        self.assertEqual(calculate('ten divided by two'), 5)
++        self.assertEqual(calculate('ten divided by three'), 3.33)
+ 
+     def test_same_number_operations(self):
+-        self.assertEqual(process_line('five plus five'), 10)
+-        self.assertEqual(process_line('five minus five'), 0)
+-        self.assertEqual(process_line('five times five'), 25)
+-        self.assertEqual(process_line('five divided by five'), 1)
++        self.assertEqual(calculate('five plus five'), 10)
++        self.assertEqual(calculate('five minus five'), 0)
++        self.assertEqual(calculate('five times five'), 25)
++        self.assertEqual(calculate('five divided by five'), 1)
+ 
+ 
+ class TestCompleteExamples(unittest.TestCase):
+@@ -200,7 +200,7 @@ class TestCompleteExamples(unittest.TestCase):
+ 
+         for expression, expected in test_cases:
+             with self.subTest(expression=expression):
+-                result = process_line(expression)
++                result = calculate(expression)
+                 self.assertEqual(result, expected,
+                     f"Expression '{expression}' should equal {expected}, got {result}")
+ 
+-- 
+2.39.5 (Apple Git-154)
+

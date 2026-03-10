@@ -1,0 +1,24 @@
+From cf0f5446b6b11f1bc1e840f101ca183553e8ba9c Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:43:56 -0800
+Subject: [PATCH 07/56] - r Remove redundant sys.path.insert and unused os
+ import
+
+---
+ .../src/natural_language_calculator.py                          | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/natural_language_calculator.py b/katas/natural-language-calculator/src/natural_language_calculator.py
+index 20ae398..436b203 100644
+--- a/katas/natural-language-calculator/src/natural_language_calculator.py
++++ b/katas/natural-language-calculator/src/natural_language_calculator.py
+@@ -1,6 +1,4 @@
+ import sys
+-import os
+-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+ 
+ from processor import process_line
+ 
+-- 
+2.39.5 (Apple Git-154)
+

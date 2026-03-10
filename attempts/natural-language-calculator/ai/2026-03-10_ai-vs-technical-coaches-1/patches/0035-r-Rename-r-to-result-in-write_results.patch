@@ -1,0 +1,27 @@
+From 76d7d940b0951e61c7f921d841c0eee284280463 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:16:39 -0800
+Subject: [PATCH 35/56] - r Rename r to result in write_results
+
+---
+ .../src/natural_language_calculator.py                        | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/natural_language_calculator.py b/katas/natural-language-calculator/src/natural_language_calculator.py
+index ec193f9..267e91b 100644
+--- a/katas/natural-language-calculator/src/natural_language_calculator.py
++++ b/katas/natural-language-calculator/src/natural_language_calculator.py
+@@ -14,8 +14,8 @@ def calculate_all(expressions):
+ 
+ def write_results(filepath, results):
+     with open(filepath, 'w') as f:
+-        for r in results:
+-            f.write(str(r) + '\n')
++        for result in results:
++            f.write(str(result) + '\n')
+ 
+ 
+ def output_filepath(input_filepath):
+-- 
+2.39.5 (Apple Git-154)
+

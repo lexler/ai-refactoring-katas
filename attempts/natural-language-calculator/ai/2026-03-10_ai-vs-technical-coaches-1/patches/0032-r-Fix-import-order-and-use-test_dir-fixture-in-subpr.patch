@@ -1,0 +1,80 @@
+From d67c5203b3411f66914e01a6ef28f607fa75a319 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:11:12 -0800
+Subject: [PATCH 32/56] - r Fix import order and use test_dir fixture in
+ subprocess test
+
+---
+ .../.refactoring-state                        |  2 +-
+ .../tests/test_file_operations.py             | 36 +++++++++----------
+ 2 files changed, 17 insertions(+), 21 deletions(-)
+
+diff --git a/katas/natural-language-calculator/.refactoring-state b/katas/natural-language-calculator/.refactoring-state
+index 0e7818b..71a88d0 100644
+--- a/katas/natural-language-calculator/.refactoring-state
++++ b/katas/natural-language-calculator/.refactoring-state
+@@ -1,2 +1,2 @@
+ phase: 2
+-lens: 02-naming
++lens: 22-outside-box
+diff --git a/katas/natural-language-calculator/tests/test_file_operations.py b/katas/natural-language-calculator/tests/test_file_operations.py
+index ef2303d..0f1722e 100644
+--- a/katas/natural-language-calculator/tests/test_file_operations.py
++++ b/katas/natural-language-calculator/tests/test_file_operations.py
+@@ -1,9 +1,10 @@
+-import pytest
+ import os
+-import tempfile
+ import shutil
+ import subprocess
+ import sys
++import tempfile
++
++import pytest
+ 
+ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+ from natural_language_calculator import main
+@@ -234,27 +235,22 @@ def test_trailing_whitespace_in_expressions(test_dir):
+     assert lines == ['4', '6']
+ 
+ 
+-def test_subprocess_integration():
++def test_subprocess_integration(test_dir):
+     script_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'natural_language_calculator.py')
+-    test_dir = tempfile.mkdtemp()
++    input_file = create_test_file(test_dir, 'subprocess_test.txt', 'one plus three\n')
+ 
+-    try:
+-        input_file = create_test_file(test_dir, 'subprocess_test.txt', 'one plus three\n')
++    result = subprocess.run(
++        [sys.executable, script_path, input_file],
++        capture_output=True,
++        text=True
++    )
+ 
+-        result = subprocess.run(
+-            [sys.executable, script_path, input_file],
+-            capture_output=True,
+-            text=True
+-        )
++    assert result.returncode == 0
+ 
+-        assert result.returncode == 0
+-
+-        output_file = input_file.replace('.txt', '_results.txt')
+-        assert os.path.exists(output_file)
++    output_file = input_file.replace('.txt', '_results.txt')
++    assert os.path.exists(output_file)
+ 
+-        with open(output_file, 'r') as f:
+-            content = f.read().strip()
++    with open(output_file, 'r') as f:
++        content = f.read().strip()
+ 
+-        assert content == '4'
+-    finally:
+-        shutil.rmtree(test_dir)
++    assert content == '4'
+-- 
+2.39.5 (Apple Git-154)
+

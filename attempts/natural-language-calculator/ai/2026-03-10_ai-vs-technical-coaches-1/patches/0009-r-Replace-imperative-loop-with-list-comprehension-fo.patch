@@ -1,0 +1,33 @@
+From e211c9b86a59dc6982a8e9b4d5c5ff07ef964109 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:44:39 -0800
+Subject: [PATCH 09/56] - r Replace imperative loop with list comprehension for
+ NESTED_DELIMITERS
+
+---
+ katas/natural-language-calculator/src/processor.py | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/processor.py b/katas/natural-language-calculator/src/processor.py
+index 07dcc9c..192c67e 100644
+--- a/katas/natural-language-calculator/src/processor.py
++++ b/katas/natural-language-calculator/src/processor.py
+@@ -10,10 +10,11 @@ OPERATIONS = {
+     'divided by': operator.truediv,
+ }
+ 
+-NESTED_DELIMITERS = []
+-for op_name in OPERATIONS:
+-    NESTED_DELIMITERS.append(f', {op_name} the result of ')
+-    NESTED_DELIMITERS.append(f' {op_name} the result of ')
++NESTED_DELIMITERS = [
++    f'{sep}{op_name} the result of '
++    for op_name in OPERATIONS
++    for sep in (', ', ' ')
++]
+ 
+ def normalize_line(line):
+     line = line.lower()
+-- 
+2.39.5 (Apple Git-154)
+

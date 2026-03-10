@@ -1,0 +1,70 @@
+From b9f9c43ba85b9c3a3c752bbcbb9a440514db08c0 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:28:35 -0800
+Subject: [PATCH 45/56] =?UTF-8?q?-=20r=20Align=20test=20names=20with=20pro?=
+ =?UTF-8?q?duction=20vocabulary:=20nested=E2=86=92compound,=20comma=20test?=
+ =?UTF-8?q?s=20renamed?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../tests/test_calculator.py                  | 22 +++++++++----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index 4c03db4..4b890a9 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -87,37 +87,37 @@ class TestCalculate(unittest.TestCase):
+         self.assertEqual(result, 3)
+         self.assertIsInstance(result, int)
+ 
+-    def test_nested_with_comma_minus(self):
++    def test_comma_precedence_minus(self):
+         self.assertEqual(calculate('the result of four plus one, minus five'), 0)
+ 
+-    def test_nested_with_comma_divided(self):
++    def test_comma_precedence_divided(self):
+         self.assertEqual(calculate('The result of three times three, divided by two'), 4.5)
+ 
+-    def test_nested_with_result_of_minus(self):
++    def test_compound_minus(self):
+         self.assertEqual(calculate('six times five minus the result of nine times two'), 12)
+ 
+-    def test_nested_both_sides(self):
++    def test_compound_both_sides(self):
+         self.assertEqual(calculate('the result of ten plus three, minus the result of one plus seven'), 5)
+ 
+-    def test_nested_both_sides_plus(self):
++    def test_compound_both_sides_plus(self):
+         self.assertEqual(calculate('the result of two plus three, plus the result of one plus four'), 10)
+ 
+-    def test_nested_with_result_of_plus(self):
++    def test_compound_plus(self):
+         self.assertEqual(calculate('six plus the result of two times three'), 12)
+ 
+-    def test_nested_both_sides_times(self):
++    def test_compound_both_sides_times(self):
+         self.assertEqual(calculate('the result of two plus three, times the result of one plus one'), 10)
+ 
+-    def test_nested_with_result_of_times(self):
++    def test_compound_times(self):
+         self.assertEqual(calculate('three times the result of two plus two'), 12)
+ 
+-    def test_nested_with_result_of_divided(self):
++    def test_compound_divided(self):
+         self.assertEqual(calculate('six divided by the result of one plus one'), 3)
+ 
+-    def test_nested_both_sides_divided(self):
++    def test_compound_both_sides_divided(self):
+         self.assertEqual(calculate('the result of ten plus two, divided by the result of one plus one'), 6)
+ 
+-    def test_comma_precedence_with_nested_divisor(self):
++    def test_comma_precedence_with_compound_divisor(self):
+         self.assertEqual(calculate('six plus four, divided by the result of one plus one'), 5)
+ 
+     def test_case_insensitive(self):
+-- 
+2.39.5 (Apple Git-154)
+

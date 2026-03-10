@@ -1,0 +1,44 @@
+From 4f14b7fe056d9020b6a86dbd293d1841dacc1a50 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:43:24 -0800
+Subject: [PATCH 06/56] - r Replace bare except clauses with specific exception
+ types in main
+
+---
+ .../src/natural_language_calculator.py                      | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/natural_language_calculator.py b/katas/natural-language-calculator/src/natural_language_calculator.py
+index b33d2aa..20ae398 100644
+--- a/katas/natural-language-calculator/src/natural_language_calculator.py
++++ b/katas/natural-language-calculator/src/natural_language_calculator.py
+@@ -14,7 +14,7 @@ def main(input_file=None):
+     try:
+         with open(input_file, 'r') as f:
+             lines = f.readlines()
+-    except:
++    except OSError:
+         print("Error")
+         return 1
+ 
+@@ -25,7 +25,7 @@ def main(input_file=None):
+             try:
+                 result = process_line(line)
+                 results.append(result)
+-            except:
++            except ValueError:
+                 print("Error")
+                 return 1
+ 
+@@ -34,7 +34,7 @@ def main(input_file=None):
+         with open(output_file, 'w') as f:
+             for r in results:
+                 f.write(str(r) + '\n')
+-    except:
++    except OSError:
+         print("Error")
+         return 1
+ 
+-- 
+2.39.5 (Apple Git-154)
+

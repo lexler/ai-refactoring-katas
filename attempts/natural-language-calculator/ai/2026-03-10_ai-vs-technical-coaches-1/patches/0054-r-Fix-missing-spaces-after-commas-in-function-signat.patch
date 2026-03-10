@@ -1,0 +1,53 @@
+From ab84d8c00f2cbae659c92a72b8410087a7a6a8ca Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 21:02:24 -0800
+Subject: [PATCH 54/56] - r Fix missing spaces after commas in function
+ signatures
+
+---
+ .../tests/test_file_operations.py                         | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/katas/natural-language-calculator/tests/test_file_operations.py b/katas/natural-language-calculator/tests/test_file_operations.py
+index a15ba06..e044537 100644
+--- a/katas/natural-language-calculator/tests/test_file_operations.py
++++ b/katas/natural-language-calculator/tests/test_file_operations.py
+@@ -14,7 +14,7 @@ def create_test_file(tmp_path, filename, content):
+     return filepath
+ 
+ 
+-def test_basic_file_processing(tmp_path,capsys):
++def test_basic_file_processing(tmp_path, capsys):
+     input_content = "one plus three\neight minus two\n"
+     input_file = create_test_file(tmp_path, 'test_input.txt', input_content)
+ 
+@@ -83,7 +83,7 @@ def test_output_filename_convention(tmp_path):
+     assert os.path.exists(expected_output)
+ 
+ 
+-def test_missing_input_file(tmp_path,capsys):
++def test_missing_input_file(tmp_path, capsys):
+     nonexistent_file = os.path.join(tmp_path, 'does_not_exist.txt')
+ 
+     exit_code = main(nonexistent_file)
+@@ -141,7 +141,7 @@ def test_preserves_integer_vs_float_format(tmp_path):
+     assert lines[1] == '0.33'
+ 
+ 
+-def test_success_message_printed(tmp_path,capsys):
++def test_success_message_printed(tmp_path, capsys):
+     input_file = create_test_file(tmp_path, 'test.txt', 'one plus one\n')
+ 
+     exit_code = main(input_file)
+@@ -222,7 +222,7 @@ def test_trailing_whitespace_in_expressions(tmp_path):
+     assert lines == ['4', '6']
+ 
+ 
+-def test_write_error(tmp_path,capsys):
++def test_write_error(tmp_path, capsys):
+     readonly_dir = os.path.join(tmp_path, 'readonly')
+     os.makedirs(readonly_dir)
+     input_file = create_test_file(readonly_dir, 'test.txt', 'one plus one\n')
+-- 
+2.39.5 (Apple Git-154)
+

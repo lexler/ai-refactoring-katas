@@ -1,0 +1,28 @@
+From 3300331769f87f1f2a3dfb644176af1c2b683900 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:19:47 -0800
+Subject: [PATCH 39/56] - r Inline locals in evaluate_compound_operation to
+ match evaluate_simple_operation style
+
+---
+ katas/natural-language-calculator/src/calculator.py | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/calculator.py b/katas/natural-language-calculator/src/calculator.py
+index 375e976..efb353b 100644
+--- a/katas/natural-language-calculator/src/calculator.py
++++ b/katas/natural-language-calculator/src/calculator.py
+@@ -47,9 +47,7 @@ def find_operation(expression, patterns):
+ 
+ def evaluate_compound_operation(expression, delimiter, op_func):
+     parts = expression.split(delimiter)
+-    left_val = evaluate_expression(parts[0])
+-    right_val = evaluate_expression(parts[1])
+-    return op_func(left_val, right_val)
++    return op_func(evaluate_expression(parts[0]), evaluate_expression(parts[1]))
+ 
+ 
+ def evaluate_expression(expression):
+-- 
+2.39.5 (Apple Git-154)
+

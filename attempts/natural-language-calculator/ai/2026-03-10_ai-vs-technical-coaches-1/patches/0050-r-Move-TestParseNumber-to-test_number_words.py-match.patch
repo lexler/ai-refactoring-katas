@@ -1,0 +1,102 @@
+From adee026448689c14b3a362e9d54af970ed351bd9 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:50:43 -0800
+Subject: [PATCH 50/56] - r Move TestParseNumber to test_number_words.py
+ matching module boundary
+
+---
+ .../tests/test_calculator.py                  | 30 --------------
+ .../tests/test_number_words.py                | 40 +++++++++++++++++++
+ 2 files changed, 40 insertions(+), 30 deletions(-)
+ create mode 100644 katas/natural-language-calculator/tests/test_number_words.py
+
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index cec7944..8df9ddf 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -5,36 +5,6 @@ import unittest
+ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+ 
+ from calculator import calculate, evaluate_expression
+-from number_words import parse_number
+-
+-
+-class TestParseNumber(unittest.TestCase):
+-
+-    def test_word_numbers(self):
+-        self.assertEqual(parse_number('zero'), 0)
+-        self.assertEqual(parse_number('one'), 1)
+-        self.assertEqual(parse_number('five'), 5)
+-        self.assertEqual(parse_number('ten'), 10)
+-
+-    def test_word_numbers_case_insensitive(self):
+-        self.assertEqual(parse_number('One'), 1)
+-        self.assertEqual(parse_number('FIVE'), 5)
+-        self.assertEqual(parse_number('TEN'), 10)
+-
+-    def test_digit_strings(self):
+-        self.assertEqual(parse_number('0'), 0)
+-        self.assertEqual(parse_number('5'), 5)
+-        self.assertEqual(parse_number('10'), 10)
+-
+-    def test_whitespace_handling(self):
+-        self.assertEqual(parse_number('  five  '), 5)
+-        self.assertEqual(parse_number('\ttwo\n'), 2)
+-
+-    def test_invalid_word_raises_error(self):
+-        with self.assertRaises(ValueError):
+-            parse_number('eleven')
+-        with self.assertRaises(ValueError):
+-            parse_number('abc')
+ 
+ 
+ class TestEvaluateExpression(unittest.TestCase):
+diff --git a/katas/natural-language-calculator/tests/test_number_words.py b/katas/natural-language-calculator/tests/test_number_words.py
+new file mode 100644
+index 0000000..1a5387a
+--- /dev/null
++++ b/katas/natural-language-calculator/tests/test_number_words.py
+@@ -0,0 +1,40 @@
++import os
++import sys
++import unittest
++
++sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
++
++from number_words import parse_number
++
++
++class TestParseNumber(unittest.TestCase):
++
++    def test_word_numbers(self):
++        self.assertEqual(parse_number('zero'), 0)
++        self.assertEqual(parse_number('one'), 1)
++        self.assertEqual(parse_number('five'), 5)
++        self.assertEqual(parse_number('ten'), 10)
++
++    def test_word_numbers_case_insensitive(self):
++        self.assertEqual(parse_number('One'), 1)
++        self.assertEqual(parse_number('FIVE'), 5)
++        self.assertEqual(parse_number('TEN'), 10)
++
++    def test_digit_strings(self):
++        self.assertEqual(parse_number('0'), 0)
++        self.assertEqual(parse_number('5'), 5)
++        self.assertEqual(parse_number('10'), 10)
++
++    def test_whitespace_handling(self):
++        self.assertEqual(parse_number('  five  '), 5)
++        self.assertEqual(parse_number('\ttwo\n'), 2)
++
++    def test_invalid_word_raises_error(self):
++        with self.assertRaises(ValueError):
++            parse_number('eleven')
++        with self.assertRaises(ValueError):
++            parse_number('abc')
++
++
++if __name__ == '__main__':
++    unittest.main()
+-- 
+2.39.5 (Apple Git-154)
+

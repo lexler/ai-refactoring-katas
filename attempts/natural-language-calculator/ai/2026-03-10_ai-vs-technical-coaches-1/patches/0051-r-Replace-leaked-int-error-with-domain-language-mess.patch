@@ -1,0 +1,26 @@
+From b3b2c8f1dc5ef1956a898d28247740efc51a63af Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:55:18 -0800
+Subject: [PATCH 51/56] - r Replace leaked int() error with domain-language
+ message in parse_number
+
+---
+ katas/natural-language-calculator/src/number_words.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/katas/natural-language-calculator/src/number_words.py b/katas/natural-language-calculator/src/number_words.py
+index aa570e6..2f09e25 100644
+--- a/katas/natural-language-calculator/src/number_words.py
++++ b/katas/natural-language-calculator/src/number_words.py
+@@ -19,4 +19,7 @@ def parse_number(text):
+     if text in NUMBER_WORDS:
+         return NUMBER_WORDS[text]
+ 
+-    return int(text)
++    try:
++        return int(text)
++    except ValueError:
++        raise ValueError(f"Unknown number: '{text}'")
+-- 
+2.39.5 (Apple Git-154)
+

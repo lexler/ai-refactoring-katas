@@ -1,0 +1,120 @@
+From 05c69941ee1141d1528540148463f29358983508 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:45:25 -0800
+Subject: [PATCH 11/56] - r Rename calc_simple to evaluate_expression
+
+---
+ .../src/processor.py                          | 10 +++----
+ .../tests/test_calculator.py                  | 30 +++++++++----------
+ 2 files changed, 20 insertions(+), 20 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/processor.py b/katas/natural-language-calculator/src/processor.py
+index 3d592ab..459feb3 100644
+--- a/katas/natural-language-calculator/src/processor.py
++++ b/katas/natural-language-calculator/src/processor.py
+@@ -30,8 +30,8 @@ def find_nested_operation(line):
+ 
+ def apply_nested_operation(line, delimiter, op_func):
+     parts = line.split(delimiter)
+-    left_val = calc_simple(parts[0])
+-    right_val = calc_simple(parts[1])
++    left_val = evaluate_expression(parts[0])
++    right_val = evaluate_expression(parts[1])
+     return op_func(left_val, right_val)
+ 
+ def format_result(result):
+@@ -46,13 +46,13 @@ def process_line(line):
+     if delimiter:
+         result = apply_nested_operation(line, delimiter, op_func)
+     else:
+-        result = calc_simple(line)
++        result = evaluate_expression(line)
+ 
+     return format_result(result)
+ 
+ def apply_comma_precedence(expression):
+     parts = expression.split(', ')
+-    left_val = calc_simple(parts[0])
++    left_val = evaluate_expression(parts[0])
+     rest = parts[1]
+     for op_name, op_func in OPERATIONS.items():
+         prefix = op_name + ' '
+@@ -68,7 +68,7 @@ def find_operation(expression):
+             return delimiter, op_func
+     return None, None
+ 
+-def calc_simple(expression):
++def evaluate_expression(expression):
+     expression = expression.strip()
+ 
+     if ', ' in expression:
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index 07d0eb9..d43bdd7 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -5,7 +5,7 @@ from unittest.mock import patch
+ 
+ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+ 
+-from processor import process_line, calc_simple
++from processor import process_line, evaluate_expression
+ from utils import parse_number
+ from natural_language_calculator import main
+ 
+@@ -50,39 +50,39 @@ class TestCalcSimple(unittest.TestCase):
+ 
+     def test_addition(self):
+         """Test simple addition."""
+-        self.assertEqual(calc_simple('one plus three'), 4)
+-        self.assertEqual(calc_simple('five plus five'), 10)
++        self.assertEqual(evaluate_expression('one plus three'), 4)
++        self.assertEqual(evaluate_expression('five plus five'), 10)
+ 
+     def test_subtraction(self):
+         """Test simple subtraction."""
+-        self.assertEqual(calc_simple('eight minus two'), 6)
+-        self.assertEqual(calc_simple('ten minus one'), 9)
++        self.assertEqual(evaluate_expression('eight minus two'), 6)
++        self.assertEqual(evaluate_expression('ten minus one'), 9)
+ 
+     def test_multiplication(self):
+         """Test simple multiplication."""
+-        self.assertEqual(calc_simple('three times three'), 9)
+-        self.assertEqual(calc_simple('six times five'), 30)
++        self.assertEqual(evaluate_expression('three times three'), 9)
++        self.assertEqual(evaluate_expression('six times five'), 30)
+ 
+     def test_division(self):
+         """Test simple division."""
+-        self.assertEqual(calc_simple('six divided by two'), 3)
+-        self.assertAlmostEqual(calc_simple('three divided by nine'), 0.333, places=2)
++        self.assertEqual(evaluate_expression('six divided by two'), 3)
++        self.assertAlmostEqual(evaluate_expression('three divided by nine'), 0.333, places=2)
+ 
+     def test_just_a_number(self):
+         """Test that a single number is returned as-is."""
+-        self.assertEqual(calc_simple('five'), 5)
+-        self.assertEqual(calc_simple('10'), 10)
++        self.assertEqual(evaluate_expression('five'), 5)
++        self.assertEqual(evaluate_expression('10'), 10)
+ 
+     def test_precedence_with_comma(self):
+         """Test that comma creates precedence (calculates left side first)."""
+         # "four plus one, minus five" means "(4 + 1) - 5" = 0
+-        self.assertEqual(calc_simple('four plus one, minus five'), 0)
++        self.assertEqual(evaluate_expression('four plus one, minus five'), 0)
+         # "three times three, divided by two" means "(3 * 3) / 2" = 4.5
+-        self.assertEqual(calc_simple('three times three, divided by two'), 4.5)
++        self.assertEqual(evaluate_expression('three times three, divided by two'), 4.5)
+         # "two times three, plus one" means "(2 * 3) + 1" = 7
+-        self.assertEqual(calc_simple('two times three, plus one'), 7)
++        self.assertEqual(evaluate_expression('two times three, plus one'), 7)
+         # "five plus two, times three" means "(5 + 2) * 3" = 21
+-        self.assertEqual(calc_simple('five plus two, times three'), 21)
++        self.assertEqual(evaluate_expression('five plus two, times three'), 21)
+ 
+ 
+ class TestProcessLine(unittest.TestCase):
+-- 
+2.39.5 (Apple Git-154)
+

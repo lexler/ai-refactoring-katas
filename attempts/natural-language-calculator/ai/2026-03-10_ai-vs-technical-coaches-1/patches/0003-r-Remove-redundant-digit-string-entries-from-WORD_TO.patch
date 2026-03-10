@@ -1,0 +1,44 @@
+From e25e99337c5cd222b3f207b3d0d1e117ec49d3d3 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:42:30 -0800
+Subject: [PATCH 03/56] - r Remove redundant digit string entries from
+ WORD_TO_NUMBER
+
+---
+ .../natural-language-calculator/src/utils.py  | 22 +++++++++----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/utils.py b/katas/natural-language-calculator/src/utils.py
+index 5776093..b8fce21 100644
+--- a/katas/natural-language-calculator/src/utils.py
++++ b/katas/natural-language-calculator/src/utils.py
+@@ -1,15 +1,15 @@
+ WORD_TO_NUMBER = {
+-    'zero': 0, '0': 0,
+-    'one': 1, '1': 1,
+-    'two': 2, '2': 2,
+-    'three': 3, '3': 3,
+-    'four': 4, '4': 4,
+-    'five': 5, '5': 5,
+-    'six': 6, '6': 6,
+-    'seven': 7, '7': 7,
+-    'eight': 8, '8': 8,
+-    'nine': 9, '9': 9,
+-    'ten': 10, '10': 10
++    'zero': 0,
++    'one': 1,
++    'two': 2,
++    'three': 3,
++    'four': 4,
++    'five': 5,
++    'six': 6,
++    'seven': 7,
++    'eight': 8,
++    'nine': 9,
++    'ten': 10,
+ }
+ 
+ def get_num(word):
+-- 
+2.39.5 (Apple Git-154)
+

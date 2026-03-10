@@ -1,0 +1,74 @@
+From a527208bbb4a3a7e31c2022e2ad74742915d3b84 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:54:21 -0800
+Subject: [PATCH 21/56] - r Clarify sibling names: compound vs simple
+ operations, COMPOUND_OPERATIONS
+
+---
+ .../natural-language-calculator/src/processor.py | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/processor.py b/katas/natural-language-calculator/src/processor.py
+index ab044bb..c14251e 100644
+--- a/katas/natural-language-calculator/src/processor.py
++++ b/katas/natural-language-calculator/src/processor.py
+@@ -10,7 +10,7 @@ OPERATIONS = {
+     'divided by': operator.truediv,
+ }
+ 
+-NESTED_DELIMITERS = [
++COMPOUND_OPERATIONS = [
+     (f'{sep}{op_name} the result of ', op_func)
+     for op_name, op_func in OPERATIONS.items()
+     for sep in (', ', ' ')
+@@ -21,14 +21,14 @@ def normalize_expression(line):
+     return line.lower().removeprefix(RESULT_PREFIX)
+ 
+ 
+-def find_nested_operation(line):
+-    for delimiter, op_func in NESTED_DELIMITERS:
++def find_compound_operation(line):
++    for delimiter, op_func in COMPOUND_OPERATIONS:
+         if delimiter in line:
+             return delimiter, op_func
+     return None, None
+ 
+ 
+-def apply_nested_operation(line, delimiter, op_func):
++def evaluate_compound_operation(line, delimiter, op_func):
+     parts = line.split(delimiter)
+     left_val = evaluate_expression(parts[0])
+     right_val = evaluate_expression(parts[1])
+@@ -44,9 +44,9 @@ def format_result(result):
+ def calculate(line):
+     line = normalize_expression(line)
+ 
+-    delimiter, op_func = find_nested_operation(line)
++    delimiter, op_func = find_compound_operation(line)
+     if delimiter:
+-        result = apply_nested_operation(line, delimiter, op_func)
++        result = evaluate_compound_operation(line, delimiter, op_func)
+     else:
+         result = evaluate_expression(line)
+ 
+@@ -65,7 +65,7 @@ def apply_comma_precedence(expression):
+     raise ValueError(f"Unknown operation after comma: '{rest}'")
+ 
+ 
+-def find_operation(expression):
++def find_simple_operation(expression):
+     for op_name, op_func in OPERATIONS.items():
+         delimiter = f' {op_name} '
+         if delimiter in expression:
+@@ -79,7 +79,7 @@ def evaluate_expression(expression):
+     if ', ' in expression:
+         return apply_comma_precedence(expression)
+ 
+-    delimiter, op_func = find_operation(expression)
++    delimiter, op_func = find_simple_operation(expression)
+     if delimiter:
+         parts = expression.split(delimiter)
+         return op_func(parse_number(parts[0]), parse_number(parts[1]))
+-- 
+2.39.5 (Apple Git-154)
+

@@ -1,0 +1,94 @@
+From a79effc78b159c0d40d4a937a5d577736dde6263 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:42:16 -0800
+Subject: [PATCH 02/56] - r Extract duplicated operation branches in
+ calc_simple into data-driven lookup
+
+---
+ .../src/processor.py                          | 69 +++++++------------
+ 1 file changed, 26 insertions(+), 43 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/processor.py b/katas/natural-language-calculator/src/processor.py
+index dfabce2..f7ee0ff 100644
+--- a/katas/natural-language-calculator/src/processor.py
++++ b/katas/natural-language-calculator/src/processor.py
+@@ -50,50 +50,33 @@ def process_line(line):
+ 
+     return format_result(result)
+ 
++def apply_comma_precedence(expression):
++    parts = expression.split(', ')
++    left_val = calc_simple(parts[0])
++    rest = parts[1]
++    for op_name, op_func in OPERATIONS.items():
++        prefix = op_name + ' '
++        if rest.startswith(prefix):
++            right_val = get_num(rest[len(prefix):])
++            return op_func(left_val, right_val)
++    return None
++
++def find_operation(expression):
++    for op_name, op_func in OPERATIONS.items():
++        delimiter = f' {op_name} '
++        if delimiter in expression:
++            return delimiter, op_func
++    return None, None
++
+ def calc_simple(expression):
+     expression = expression.strip()
+ 
+-    # Handle comma-separated operations (precedence)
+     if ', ' in expression:
+-        parts = expression.split(', ')
+-        left = parts[0]
+-        rest = parts[1]
+-        left_val = calc_simple(left)
+-        # Now parse the rest to see what operation
+-        if rest.startswith('minus '):
+-            right_val = get_num(rest[6:])
+-            return left_val - right_val
+-        elif rest.startswith('plus '):
+-            right_val = get_num(rest[5:])
+-            return left_val + right_val
+-        elif rest.startswith('times '):
+-            right_val = get_num(rest[6:])
+-            return left_val * right_val
+-        elif rest.startswith('divided by '):
+-            right_val = get_num(rest[11:])
+-            return left_val / right_val
+-
+-    # Try to parse the expression
+-    if ' plus ' in expression:
+-        parts = expression.split(' plus ')
+-        num1 = get_num(parts[0].strip())
+-        num2 = get_num(parts[1].strip())
+-        return num1 + num2
+-    elif ' minus ' in expression:
+-        parts = expression.split(' minus ')
+-        num1 = get_num(parts[0].strip())
+-        num2 = get_num(parts[1].strip())
+-        return num1 - num2
+-    elif ' times ' in expression:
+-        parts = expression.split(' times ')
+-        num1 = get_num(parts[0].strip())
+-        num2 = get_num(parts[1].strip())
+-        return num1 * num2
+-    elif ' divided by ' in expression:
+-        parts = expression.split(' divided by ')
+-        num1 = get_num(parts[0].strip())
+-        num2 = get_num(parts[1].strip())
+-        return num1 / num2
+-    else:
+-        # Might be just a number
+-        return get_num(expression)
++        return apply_comma_precedence(expression)
++
++    delimiter, op_func = find_operation(expression)
++    if delimiter:
++        parts = expression.split(delimiter)
++        return op_func(get_num(parts[0]), get_num(parts[1]))
++
++    return get_num(expression)
+-- 
+2.39.5 (Apple Git-154)
+

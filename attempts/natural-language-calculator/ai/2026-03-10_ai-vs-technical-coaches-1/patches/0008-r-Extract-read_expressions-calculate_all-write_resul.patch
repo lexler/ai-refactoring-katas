@@ -1,0 +1,84 @@
+From 9d5783ce0651467356623115b54680b9a12c185c Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:44:17 -0800
+Subject: [PATCH 08/56] - r Extract read_expressions, calculate_all,
+ write_results from main
+
+---
+ .../src/natural_language_calculator.py        | 50 ++++++++++---------
+ 1 file changed, 26 insertions(+), 24 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/natural_language_calculator.py b/katas/natural-language-calculator/src/natural_language_calculator.py
+index 436b203..8b4895a 100644
+--- a/katas/natural-language-calculator/src/natural_language_calculator.py
++++ b/katas/natural-language-calculator/src/natural_language_calculator.py
+@@ -2,6 +2,26 @@ import sys
+ 
+ from processor import process_line
+ 
++
++def read_expressions(filepath):
++    with open(filepath, 'r') as f:
++        return [line.strip() for line in f if line.strip()]
++
++
++def calculate_all(expressions):
++    return [process_line(expr) for expr in expressions]
++
++
++def write_results(filepath, results):
++    with open(filepath, 'w') as f:
++        for r in results:
++            f.write(str(r) + '\n')
++
++
++def output_filepath(input_filepath):
++    return input_filepath.replace('.txt', '_results.txt')
++
++
+ def main(input_file=None):
+     if input_file is None:
+         if len(sys.argv) < 2:
+@@ -10,33 +30,15 @@ def main(input_file=None):
+         input_file = sys.argv[1]
+ 
+     try:
+-        with open(input_file, 'r') as f:
+-            lines = f.readlines()
+-    except OSError:
+-        print("Error")
+-        return 1
+-
+-    results = []
+-    for line in lines:
+-        line = line.strip()
+-        if line:
+-            try:
+-                result = process_line(line)
+-                results.append(result)
+-            except ValueError:
+-                print("Error")
+-                return 1
+-
+-    output_file = input_file.replace('.txt', '_results.txt')
+-    try:
+-        with open(output_file, 'w') as f:
+-            for r in results:
+-                f.write(str(r) + '\n')
+-    except OSError:
++        expressions = read_expressions(input_file)
++        results = calculate_all(expressions)
++        out_file = output_filepath(input_file)
++        write_results(out_file, results)
++    except (OSError, ValueError):
+         print("Error")
+         return 1
+ 
+-    print(f"Results written to {output_file}")
++    print(f"Results written to {out_file}")
+     return 0
+ 
+ if __name__ == "__main__":
+-- 
+2.39.5 (Apple Git-154)
+

@@ -1,0 +1,40 @@
+From db07aa9a2c7b083cff91a240fc986bcc6edbfd50 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:42:24 -0800
+Subject: [PATCH 49/56] - r Move format_result next to calculate's other direct
+ helpers
+
+---
+ katas/natural-language-calculator/src/calculator.py | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/calculator.py b/katas/natural-language-calculator/src/calculator.py
+index efb353b..8a2ea86 100644
+--- a/katas/natural-language-calculator/src/calculator.py
++++ b/katas/natural-language-calculator/src/calculator.py
+@@ -63,6 +63,12 @@ def evaluate_expression(expression):
+     return parse_number(expression)
+ 
+ 
++def format_result(result):
++    if result == int(result):
++        return int(result)
++    return round(result, 2)
++
++
+ def apply_comma_precedence(expression):
+     parts = expression.split(', ')
+     left_val = evaluate_expression(parts[0])
+@@ -78,9 +84,3 @@ def apply_comma_precedence(expression):
+ def evaluate_simple_operation(expression, delimiter, op_func):
+     parts = expression.split(delimiter)
+     return op_func(parse_number(parts[0]), parse_number(parts[1]))
+-
+-
+-def format_result(result):
+-    if result == int(result):
+-        return int(result)
+-    return round(result, 2)
+-- 
+2.39.5 (Apple Git-154)
+

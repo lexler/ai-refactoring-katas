@@ -1,0 +1,44 @@
+From bb4f87d4852e5d31c0d661a6ea1b8c5d98b43056 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:45:58 -0800
+Subject: [PATCH 12/56] - r Rename TestGetNum class, simplify normalize_line
+ with removeprefix
+
+---
+ katas/natural-language-calculator/src/processor.py         | 5 +----
+ katas/natural-language-calculator/tests/test_calculator.py | 3 +--
+ 2 files changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/processor.py b/katas/natural-language-calculator/src/processor.py
+index 459feb3..d2b809b 100644
+--- a/katas/natural-language-calculator/src/processor.py
++++ b/katas/natural-language-calculator/src/processor.py
+@@ -17,10 +17,7 @@ NESTED_DELIMITERS = [
+ ]
+ 
+ def normalize_line(line):
+-    line = line.lower()
+-    if line.startswith(RESULT_PREFIX):
+-        line = line[len(RESULT_PREFIX):]
+-    return line
++    return line.lower().removeprefix(RESULT_PREFIX)
+ 
+ def find_nested_operation(line):
+     for delimiter, op_func in NESTED_DELIMITERS:
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index d43bdd7..d5d5b0c 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -10,8 +10,7 @@ from utils import parse_number
+ from natural_language_calculator import main
+ 
+ 
+-class TestGetNum(unittest.TestCase):
+-    """Test the word-to-number conversion."""
++class TestParseNumber(unittest.TestCase):
+ 
+     def test_word_numbers(self):
+         """Test that word numbers convert correctly."""
+-- 
+2.39.5 (Apple Git-154)
+

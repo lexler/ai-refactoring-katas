@@ -1,0 +1,26 @@
+From d95d048e0d524f857481492ed285a4a8e52f5023 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:06:16 -0800
+Subject: [PATCH 30/56] - r Fold TestEdgeCases methods into TestCalculate
+
+---
+ katas/natural-language-calculator/tests/test_calculator.py | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index 1e6957b..516e778 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -138,9 +138,6 @@ class TestCalculate(unittest.TestCase):
+         result2 = calculate('one plus three')
+         self.assertEqual(result1, result2)
+ 
+-
+-class TestEdgeCases(unittest.TestCase):
+-
+     def test_zero_operations(self):
+         self.assertEqual(calculate('zero plus five'), 5)
+         self.assertEqual(calculate('ten minus zero'), 10)
+-- 
+2.39.5 (Apple Git-154)
+

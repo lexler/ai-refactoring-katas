@@ -1,0 +1,42 @@
+From 4996494f03711d95d72a8894d4f08e3982398069 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:16:29 -0800
+Subject: [PATCH 34/56] - r Remove arithmetic-explanation comments from tests
+
+---
+ katas/natural-language-calculator/tests/test_calculator.py | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index 516e778..706592e 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -63,13 +63,9 @@ class TestEvaluateExpression(unittest.TestCase):
+         self.assertEqual(evaluate_expression('10'), 10)
+ 
+     def test_precedence_with_comma(self):
+-        # "four plus one, minus five" means "(4 + 1) - 5" = 0
+         self.assertEqual(evaluate_expression('four plus one, minus five'), 0)
+-        # "three times three, divided by two" means "(3 * 3) / 2" = 4.5
+         self.assertEqual(evaluate_expression('three times three, divided by two'), 4.5)
+-        # "two times three, plus one" means "(2 * 3) + 1" = 7
+         self.assertEqual(evaluate_expression('two times three, plus one'), 7)
+-        # "five plus two, times three" means "(5 + 2) * 3" = 21
+         self.assertEqual(evaluate_expression('five plus two, times three'), 21)
+ 
+ 
+@@ -98,11 +94,9 @@ class TestCalculate(unittest.TestCase):
+         self.assertEqual(calculate('The result of three times three, divided by two'), 4.5)
+ 
+     def test_nested_with_result_of_minus(self):
+-        # 30 - 18 = 12
+         self.assertEqual(calculate('six times five minus the result of nine times two'), 12)
+ 
+     def test_nested_both_sides(self):
+-        # 13 - 8 = 5
+         self.assertEqual(calculate('the result of ten plus three, minus the result of one plus seven'), 5)
+ 
+     def test_nested_both_sides_plus(self):
+-- 
+2.39.5 (Apple Git-154)
+

@@ -1,0 +1,25 @@
+From ff505b94cff655971c8e54fd66814cb20ffc3ada Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:43:08 -0800
+Subject: [PATCH 05/56] - r Replace bare except with specific ValueError in
+ parse_number
+
+---
+ katas/natural-language-calculator/src/utils.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/utils.py b/katas/natural-language-calculator/src/utils.py
+index 5d5ca3d..2ed22dc 100644
+--- a/katas/natural-language-calculator/src/utils.py
++++ b/katas/natural-language-calculator/src/utils.py
+@@ -20,5 +20,5 @@ def parse_number(word):
+ 
+     try:
+         return int(word)
+-    except:
+-        raise ValueError("Unknown number")
++    except ValueError:
++        raise ValueError(f"Unknown number: '{word}'")
+-- 
+2.39.5 (Apple Git-154)
+

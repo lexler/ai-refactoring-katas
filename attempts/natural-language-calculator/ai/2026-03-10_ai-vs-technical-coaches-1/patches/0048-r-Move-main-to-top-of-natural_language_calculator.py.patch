@@ -1,0 +1,68 @@
+From f04fbc831de7021e560dec8fe1995550baa70ab4 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:41:38 -0800
+Subject: [PATCH 48/56] - r Move main to top of natural_language_calculator.py
+ for narrative order
+
+---
+ .../src/natural_language_calculator.py        | 38 +++++++++----------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/natural_language_calculator.py b/katas/natural-language-calculator/src/natural_language_calculator.py
+index b8d88ad..9bf18e6 100644
+--- a/katas/natural-language-calculator/src/natural_language_calculator.py
++++ b/katas/natural-language-calculator/src/natural_language_calculator.py
+@@ -3,25 +3,6 @@ import sys
+ from calculator import calculate
+ 
+ 
+-def read_expressions(filepath):
+-    with open(filepath, 'r') as f:
+-        return [line.strip() for line in f if line.strip()]
+-
+-
+-def calculate_all(expressions):
+-    return [calculate(expr) for expr in expressions]
+-
+-
+-def write_results(filepath, results):
+-    with open(filepath, 'w') as f:
+-        for result in results:
+-            f.write(str(result) + '\n')
+-
+-
+-def output_filepath(input_filepath):
+-    return input_filepath.replace('.txt', '_results.txt')
+-
+-
+ def main(input_file=None):
+     if input_file is None:
+         if len(sys.argv) < 2:
+@@ -52,5 +33,24 @@ def main(input_file=None):
+     return 0
+ 
+ 
++def read_expressions(filepath):
++    with open(filepath, 'r') as f:
++        return [line.strip() for line in f if line.strip()]
++
++
++def calculate_all(expressions):
++    return [calculate(expr) for expr in expressions]
++
++
++def output_filepath(input_filepath):
++    return input_filepath.replace('.txt', '_results.txt')
++
++
++def write_results(filepath, results):
++    with open(filepath, 'w') as f:
++        for result in results:
++            f.write(str(result) + '\n')
++
++
+ if __name__ == "__main__":
+     sys.exit(main())
+-- 
+2.39.5 (Apple Git-154)
+

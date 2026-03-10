@@ -1,0 +1,32 @@
+From 39e422fb933f04cf2e5842b88fd1cf8d848d2d2c Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:55:18 -0800
+Subject: [PATCH 23/56] - r Rename parse_number parameter from word to text
+
+---
+ katas/natural-language-calculator/src/number_words.py | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/number_words.py b/katas/natural-language-calculator/src/number_words.py
+index 9ecfa00..aa570e6 100644
+--- a/katas/natural-language-calculator/src/number_words.py
++++ b/katas/natural-language-calculator/src/number_words.py
+@@ -13,10 +13,10 @@ NUMBER_WORDS = {
+ }
+ 
+ 
+-def parse_number(word):
+-    word = word.strip().lower()
++def parse_number(text):
++    text = text.strip().lower()
+ 
+-    if word in NUMBER_WORDS:
+-        return NUMBER_WORDS[word]
++    if text in NUMBER_WORDS:
++        return NUMBER_WORDS[text]
+ 
+-    return int(word)
++    return int(text)
+-- 
+2.39.5 (Apple Git-154)
+

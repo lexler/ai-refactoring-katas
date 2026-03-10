@@ -1,0 +1,73 @@
+From 6ddd898d260b554a398919c1bbe6fdec887d1373 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:19:09 -0800
+Subject: [PATCH 38/56] - r Unify find_compound_operation and
+ find_simple_operation into find_operation
+
+---
+ .../src/calculator.py                         | 21 ++++++++-----------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/calculator.py b/katas/natural-language-calculator/src/calculator.py
+index ffb1b84..375e976 100644
+--- a/katas/natural-language-calculator/src/calculator.py
++++ b/katas/natural-language-calculator/src/calculator.py
+@@ -10,6 +10,11 @@ OPERATIONS = {
+     'divided by': operator.truediv,
+ }
+ 
++SIMPLE_OPERATIONS = [
++    (f' {op_name} ', op_func)
++    for op_name, op_func in OPERATIONS.items()
++]
++
+ COMPOUND_OPERATIONS = [
+     (f'{sep}{op_name} the result of ', op_func)
+     for op_name, op_func in OPERATIONS.items()
+@@ -20,7 +25,7 @@ COMPOUND_OPERATIONS = [
+ def calculate(expression):
+     expression = normalize_expression(expression)
+ 
+-    delimiter, op_func = find_compound_operation(expression)
++    delimiter, op_func = find_operation(expression, COMPOUND_OPERATIONS)
+     if delimiter:
+         result = evaluate_compound_operation(expression, delimiter, op_func)
+     else:
+@@ -33,8 +38,8 @@ def normalize_expression(expression):
+     return expression.lower().removeprefix(RESULT_PREFIX)
+ 
+ 
+-def find_compound_operation(expression):
+-    for delimiter, op_func in COMPOUND_OPERATIONS:
++def find_operation(expression, patterns):
++    for delimiter, op_func in patterns:
+         if delimiter in expression:
+             return delimiter, op_func
+     return None, None
+@@ -53,7 +58,7 @@ def evaluate_expression(expression):
+     if ', ' in expression:
+         return apply_comma_precedence(expression)
+ 
+-    delimiter, op_func = find_simple_operation(expression)
++    delimiter, op_func = find_operation(expression, SIMPLE_OPERATIONS)
+     if delimiter:
+         return evaluate_simple_operation(expression, delimiter, op_func)
+ 
+@@ -72,14 +77,6 @@ def apply_comma_precedence(expression):
+     raise ValueError(f"Unknown operation after comma: '{rest}'")
+ 
+ 
+-def find_simple_operation(expression):
+-    for op_name, op_func in OPERATIONS.items():
+-        delimiter = f' {op_name} '
+-        if delimiter in expression:
+-            return delimiter, op_func
+-    return None, None
+-
+-
+ def evaluate_simple_operation(expression, delimiter, op_func):
+     parts = expression.split(delimiter)
+     return op_func(parse_number(parts[0]), parse_number(parts[1]))
+-- 
+2.39.5 (Apple Git-154)
+

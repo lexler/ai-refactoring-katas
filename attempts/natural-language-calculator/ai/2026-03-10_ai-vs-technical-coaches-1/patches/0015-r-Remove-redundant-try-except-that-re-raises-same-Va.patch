@@ -1,0 +1,26 @@
+From 1419c46033ffb718a0842d4e15ea3cb861733b69 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:48:59 -0800
+Subject: [PATCH 15/56] - r Remove redundant try/except that re-raises same
+ ValueError in parse_number
+
+---
+ katas/natural-language-calculator/src/utils.py | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/utils.py b/katas/natural-language-calculator/src/utils.py
+index 2ed22dc..146e8af 100644
+--- a/katas/natural-language-calculator/src/utils.py
++++ b/katas/natural-language-calculator/src/utils.py
+@@ -18,7 +18,4 @@ def parse_number(word):
+     if word in NUMBER_WORDS:
+         return NUMBER_WORDS[word]
+ 
+-    try:
+-        return int(word)
+-    except ValueError:
+-        raise ValueError(f"Unknown number: '{word}'")
++    return int(word)
+-- 
+2.39.5 (Apple Git-154)
+

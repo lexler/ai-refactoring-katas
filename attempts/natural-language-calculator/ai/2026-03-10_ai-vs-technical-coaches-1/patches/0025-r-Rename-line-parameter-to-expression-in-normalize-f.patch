@@ -1,0 +1,63 @@
+From 74c54d307271de4f5edeba67946a88c2cbb60d02 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:56:57 -0800
+Subject: [PATCH 25/56] - r Rename line parameter to expression in normalize,
+ find, evaluate, calculate
+
+---
+ .../src/calculator.py                         | 22 +++++++++----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/calculator.py b/katas/natural-language-calculator/src/calculator.py
+index c14251e..235b46c 100644
+--- a/katas/natural-language-calculator/src/calculator.py
++++ b/katas/natural-language-calculator/src/calculator.py
+@@ -17,19 +17,19 @@ COMPOUND_OPERATIONS = [
+ ]
+ 
+ 
+-def normalize_expression(line):
+-    return line.lower().removeprefix(RESULT_PREFIX)
++def normalize_expression(expression):
++    return expression.lower().removeprefix(RESULT_PREFIX)
+ 
+ 
+-def find_compound_operation(line):
++def find_compound_operation(expression):
+     for delimiter, op_func in COMPOUND_OPERATIONS:
+-        if delimiter in line:
++        if delimiter in expression:
+             return delimiter, op_func
+     return None, None
+ 
+ 
+-def evaluate_compound_operation(line, delimiter, op_func):
+-    parts = line.split(delimiter)
++def evaluate_compound_operation(expression, delimiter, op_func):
++    parts = expression.split(delimiter)
+     left_val = evaluate_expression(parts[0])
+     right_val = evaluate_expression(parts[1])
+     return op_func(left_val, right_val)
+@@ -41,14 +41,14 @@ def format_result(result):
+     return round(result, 2)
+ 
+ 
+-def calculate(line):
+-    line = normalize_expression(line)
++def calculate(expression):
++    expression = normalize_expression(expression)
+ 
+-    delimiter, op_func = find_compound_operation(line)
++    delimiter, op_func = find_compound_operation(expression)
+     if delimiter:
+-        result = evaluate_compound_operation(line, delimiter, op_func)
++        result = evaluate_compound_operation(expression, delimiter, op_func)
+     else:
+-        result = evaluate_expression(line)
++        result = evaluate_expression(expression)
+ 
+     return format_result(result)
+ 
+-- 
+2.39.5 (Apple Git-154)
+

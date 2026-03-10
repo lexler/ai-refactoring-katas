@@ -1,0 +1,65 @@
+From 5fe20f53f43f746d03800ad2cebad37eb93889f9 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:45:03 -0800
+Subject: [PATCH 10/56] - r Store op_func alongside delimiter to remove fragile
+ string parsing
+
+---
+ .../src/processor.py                          | 21 +++++++++----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/processor.py b/katas/natural-language-calculator/src/processor.py
+index 192c67e..3d592ab 100644
+--- a/katas/natural-language-calculator/src/processor.py
++++ b/katas/natural-language-calculator/src/processor.py
+@@ -11,8 +11,8 @@ OPERATIONS = {
+ }
+ 
+ NESTED_DELIMITERS = [
+-    f'{sep}{op_name} the result of '
+-    for op_name in OPERATIONS
++    (f'{sep}{op_name} the result of ', op_func)
++    for op_name, op_func in OPERATIONS.items()
+     for sep in (', ', ' ')
+ ]
+ 
+@@ -22,18 +22,17 @@ def normalize_line(line):
+         line = line[len(RESULT_PREFIX):]
+     return line
+ 
+-def find_nested_delimiter(line):
+-    for delimiter in NESTED_DELIMITERS:
++def find_nested_operation(line):
++    for delimiter, op_func in NESTED_DELIMITERS:
+         if delimiter in line:
+-            return delimiter
+-    return None
++            return delimiter, op_func
++    return None, None
+ 
+-def apply_nested_operation(line, delimiter):
+-    op_name = delimiter.strip(', ').replace(' the result of', '')
++def apply_nested_operation(line, delimiter, op_func):
+     parts = line.split(delimiter)
+     left_val = calc_simple(parts[0])
+     right_val = calc_simple(parts[1])
+-    return OPERATIONS[op_name](left_val, right_val)
++    return op_func(left_val, right_val)
+ 
+ def format_result(result):
+     if result == int(result):
+@@ -43,9 +42,9 @@ def format_result(result):
+ def process_line(line):
+     line = normalize_line(line)
+ 
+-    delimiter = find_nested_delimiter(line)
++    delimiter, op_func = find_nested_operation(line)
+     if delimiter:
+-        result = apply_nested_operation(line, delimiter)
++        result = apply_nested_operation(line, delimiter, op_func)
+     else:
+         result = calc_simple(line)
+ 
+-- 
+2.39.5 (Apple Git-154)
+

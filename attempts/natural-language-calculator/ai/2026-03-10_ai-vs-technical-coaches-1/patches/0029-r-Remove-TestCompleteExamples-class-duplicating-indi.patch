@@ -1,0 +1,44 @@
+From a2f8b7f89980e20faf728e4da09d803107c3c9af Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:03:40 -0800
+Subject: [PATCH 29/56] - r Remove TestCompleteExamples class duplicating
+ individually tested cases
+
+---
+ .../tests/test_calculator.py                  | 20 -------------------
+ 1 file changed, 20 deletions(-)
+
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index c9fac77..1e6957b 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -157,26 +157,6 @@ class TestEdgeCases(unittest.TestCase):
+         self.assertEqual(calculate('five divided by five'), 1)
+ 
+ 
+-class TestCompleteExamples(unittest.TestCase):
+-
+-    def test_all_sample_expressions(self):
+-        test_cases = [
+-            ('one plus three', 4),
+-            ('eight minus two', 6),
+-            ('the result of four plus one, minus five', 0),
+-            ('six times five minus the result of nine times two', 12),
+-            ('the result of ten plus three, minus the result of one plus seven', 5),
+-            ('The result of three times three, divided by two', 4.5),
+-            ('Three divided by nine', 0.33),
+-        ]
+-
+-        for expression, expected in test_cases:
+-            with self.subTest(expression=expression):
+-                result = calculate(expression)
+-                self.assertEqual(result, expected,
+-                    f"Expression '{expression}' should equal {expected}, got {result}")
+-
+-
+ class TestMain(unittest.TestCase):
+ 
+     @patch('sys.argv', ['natural_language_calculator.py'])
+-- 
+2.39.5 (Apple Git-154)
+

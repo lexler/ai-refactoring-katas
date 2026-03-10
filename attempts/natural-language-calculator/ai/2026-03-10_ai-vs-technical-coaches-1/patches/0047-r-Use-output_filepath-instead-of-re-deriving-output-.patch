@@ -1,0 +1,124 @@
+From 96ea1f5bfcea6904386e61a84f9062327aa5b335 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:39:42 -0800
+Subject: [PATCH 47/56] - r Use output_filepath instead of re-deriving output
+ path in 11 tests
+
+---
+ .../tests/test_file_operations.py             | 24 +++++++++----------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/katas/natural-language-calculator/tests/test_file_operations.py b/katas/natural-language-calculator/tests/test_file_operations.py
+index fc77b3d..52713d5 100644
+--- a/katas/natural-language-calculator/tests/test_file_operations.py
++++ b/katas/natural-language-calculator/tests/test_file_operations.py
+@@ -8,7 +8,7 @@ import pytest
+ 
+ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+ 
+-from natural_language_calculator import main
++from natural_language_calculator import main, output_filepath
+ 
+ 
+ @pytest.fixture
+@@ -33,7 +33,7 @@ def test_basic_file_processing(test_dir, capsys):
+ 
+     assert exit_code == 0
+ 
+-    output_file = input_file.replace('.txt', '_results.txt')
++    output_file = output_filepath(input_file)
+     assert os.path.exists(output_file)
+ 
+     with open(output_file, 'r') as f:
+@@ -59,7 +59,7 @@ Three divided by nine
+ 
+     assert exit_code == 0
+ 
+-    output_file = input_file.replace('.txt', '_results.txt')
++    output_file = output_filepath(input_file)
+     with open(output_file, 'r') as f:
+         results = [line.strip() for line in f.readlines()]
+ 
+@@ -75,7 +75,7 @@ def test_empty_lines_ignored(test_dir):
+ 
+     assert exit_code == 0
+ 
+-    output_file = input_file.replace('.txt', '_results.txt')
++    output_file = output_filepath(input_file)
+     with open(output_file, 'r') as f:
+         lines = f.readlines()
+ 
+@@ -130,7 +130,7 @@ def test_single_expression(test_dir):
+ 
+     assert exit_code == 0
+ 
+-    output_file = input_file.replace('.txt', '_results.txt')
++    output_file = output_filepath(input_file)
+     with open(output_file, 'r') as f:
+         content = f.read().strip()
+ 
+@@ -144,7 +144,7 @@ def test_preserves_integer_vs_float_format(test_dir):
+     exit_code = main(input_file)
+     assert exit_code == 0
+ 
+-    output_file = input_file.replace('.txt', '_results.txt')
++    output_file = output_filepath(input_file)
+     with open(output_file, 'r') as f:
+         lines = [line.strip() for line in f.readlines()]
+ 
+@@ -160,14 +160,14 @@ def test_success_message_printed(test_dir, capsys):
+     assert exit_code == 0
+ 
+     captured = capsys.readouterr()
+-    output_filename = input_file.replace('.txt', '_results.txt')
++    output_filename = output_filepath(input_file)
+     assert 'results' in captured.out.lower()
+     assert os.path.basename(output_filename) in captured.out
+ 
+ 
+ def test_multiple_runs_overwrite_output(test_dir):
+     input_file = create_test_file(test_dir, 'test.txt', 'one plus one\n')
+-    output_file = input_file.replace('.txt', '_results.txt')
++    output_file = output_filepath(input_file)
+ 
+     exit_code = main(input_file)
+     assert exit_code == 0
+@@ -195,7 +195,7 @@ def test_empty_input_file(test_dir):
+ 
+     assert exit_code == 0
+ 
+-    output_file = input_file.replace('.txt', '_results.txt')
++    output_file = output_filepath(input_file)
+     assert os.path.exists(output_file)
+ 
+     with open(output_file, 'r') as f:
+@@ -211,7 +211,7 @@ def test_only_blank_lines(test_dir):
+ 
+     assert exit_code == 0
+ 
+-    output_file = input_file.replace('.txt', '_results.txt')
++    output_file = output_filepath(input_file)
+     with open(output_file, 'r') as f:
+         content = f.read()
+ 
+@@ -226,7 +226,7 @@ def test_trailing_whitespace_in_expressions(test_dir):
+ 
+     assert exit_code == 0
+ 
+-    output_file = input_file.replace('.txt', '_results.txt')
++    output_file = output_filepath(input_file)
+     with open(output_file, 'r') as f:
+         lines = [line.strip() for line in f.readlines()]
+ 
+@@ -262,7 +262,7 @@ def test_subprocess_integration(test_dir):
+ 
+     assert result.returncode == 0
+ 
+-    output_file = input_file.replace('.txt', '_results.txt')
++    output_file = output_filepath(input_file)
+     assert os.path.exists(output_file)
+ 
+     with open(output_file, 'r') as f:
+-- 
+2.39.5 (Apple Git-154)
+

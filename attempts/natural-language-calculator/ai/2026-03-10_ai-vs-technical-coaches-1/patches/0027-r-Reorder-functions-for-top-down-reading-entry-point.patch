@@ -1,0 +1,85 @@
+From 4d756cd80c1cd4c4b212a514e6bf3d2c63e0a606 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 19:59:45 -0800
+Subject: [PATCH 27/56] - r Reorder functions for top-down reading: entry point
+ first, helpers follow
+
+---
+ .../src/calculator.py                         | 46 +++++++++----------
+ 1 file changed, 23 insertions(+), 23 deletions(-)
+
+diff --git a/katas/natural-language-calculator/src/calculator.py b/katas/natural-language-calculator/src/calculator.py
+index 44a5b45..ffb1b84 100644
+--- a/katas/natural-language-calculator/src/calculator.py
++++ b/katas/natural-language-calculator/src/calculator.py
+@@ -17,6 +17,18 @@ COMPOUND_OPERATIONS = [
+ ]
+ 
+ 
++def calculate(expression):
++    expression = normalize_expression(expression)
++
++    delimiter, op_func = find_compound_operation(expression)
++    if delimiter:
++        result = evaluate_compound_operation(expression, delimiter, op_func)
++    else:
++        result = evaluate_expression(expression)
++
++    return format_result(result)
++
++
+ def normalize_expression(expression):
+     return expression.lower().removeprefix(RESULT_PREFIX)
+ 
+@@ -35,22 +47,17 @@ def evaluate_compound_operation(expression, delimiter, op_func):
+     return op_func(left_val, right_val)
+ 
+ 
+-def format_result(result):
+-    if result == int(result):
+-        return int(result)
+-    return round(result, 2)
+-
++def evaluate_expression(expression):
++    expression = expression.strip()
+ 
+-def calculate(expression):
+-    expression = normalize_expression(expression)
++    if ', ' in expression:
++        return apply_comma_precedence(expression)
+ 
+-    delimiter, op_func = find_compound_operation(expression)
++    delimiter, op_func = find_simple_operation(expression)
+     if delimiter:
+-        result = evaluate_compound_operation(expression, delimiter, op_func)
+-    else:
+-        result = evaluate_expression(expression)
++        return evaluate_simple_operation(expression, delimiter, op_func)
+ 
+-    return format_result(result)
++    return parse_number(expression)
+ 
+ 
+ def apply_comma_precedence(expression):
+@@ -78,14 +85,7 @@ def evaluate_simple_operation(expression, delimiter, op_func):
+     return op_func(parse_number(parts[0]), parse_number(parts[1]))
+ 
+ 
+-def evaluate_expression(expression):
+-    expression = expression.strip()
+-
+-    if ', ' in expression:
+-        return apply_comma_precedence(expression)
+-
+-    delimiter, op_func = find_simple_operation(expression)
+-    if delimiter:
+-        return evaluate_simple_operation(expression, delimiter, op_func)
+-
+-    return parse_number(expression)
++def format_result(result):
++    if result == int(result):
++        return int(result)
++    return round(result, 2)
+-- 
+2.39.5 (Apple Git-154)
+

@@ -1,0 +1,23 @@
+From f032bb8a37c4ce20d3101fbb0b2a2398e8a2aee6 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:16:50 -0800
+Subject: [PATCH 36/56] - r Add PEP 8 blank line before if __name__ block
+
+---
+ .../src/natural_language_calculator.py                           | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/katas/natural-language-calculator/src/natural_language_calculator.py b/katas/natural-language-calculator/src/natural_language_calculator.py
+index 267e91b..b8d88ad 100644
+--- a/katas/natural-language-calculator/src/natural_language_calculator.py
++++ b/katas/natural-language-calculator/src/natural_language_calculator.py
+@@ -51,5 +51,6 @@ def main(input_file=None):
+     print(f"Results written to {out_file}")
+     return 0
+ 
++
+ if __name__ == "__main__":
+     sys.exit(main())
+-- 
+2.39.5 (Apple Git-154)
+

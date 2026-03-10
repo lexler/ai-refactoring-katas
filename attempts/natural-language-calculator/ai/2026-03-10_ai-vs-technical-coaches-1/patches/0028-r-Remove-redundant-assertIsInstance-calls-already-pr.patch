@@ -1,0 +1,111 @@
+From 2187e5a5221dd6e944ac692a2914c095a7b0301c Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:03:23 -0800
+Subject: [PATCH 28/56] - r Remove redundant assertIsInstance calls already
+ proved by formatting tests
+
+---
+ .../tests/test_calculator.py                  | 58 +++++--------------
+ 1 file changed, 15 insertions(+), 43 deletions(-)
+
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index 57dcbbd..c9fac77 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -76,14 +76,10 @@ class TestEvaluateExpression(unittest.TestCase):
+ class TestCalculate(unittest.TestCase):
+ 
+     def test_simple_addition(self):
+-        result = calculate('one plus three')
+-        self.assertEqual(result, 4)
+-        self.assertIsInstance(result, int)
++        self.assertEqual(calculate('one plus three'), 4)
+ 
+     def test_simple_subtraction(self):
+-        result = calculate('eight minus two')
+-        self.assertEqual(result, 6)
+-        self.assertIsInstance(result, int)
++        self.assertEqual(calculate('eight minus two'), 6)
+ 
+     def test_division_with_decimal(self):
+         result = calculate('three divided by nine')
+@@ -96,63 +92,39 @@ class TestCalculate(unittest.TestCase):
+         self.assertIsInstance(result, int)
+ 
+     def test_nested_with_comma_minus(self):
+-        result = calculate('the result of four plus one, minus five')
+-        self.assertEqual(result, 0)
+-        self.assertIsInstance(result, int)
++        self.assertEqual(calculate('the result of four plus one, minus five'), 0)
+ 
+     def test_nested_with_comma_divided(self):
+-        result = calculate('The result of three times three, divided by two')
+-        self.assertEqual(result, 4.5)
+-        self.assertIsInstance(result, float)
++        self.assertEqual(calculate('The result of three times three, divided by two'), 4.5)
+ 
+     def test_nested_with_result_of_minus(self):
+-        # "six times five minus the result of nine times two"
+-        # = 30 - 18 = 12
+-        result = calculate('six times five minus the result of nine times two')
+-        self.assertEqual(result, 12)
+-        self.assertIsInstance(result, int)
++        # 30 - 18 = 12
++        self.assertEqual(calculate('six times five minus the result of nine times two'), 12)
+ 
+     def test_nested_both_sides(self):
+-        # "result of ten plus three, minus result of one plus seven"
+-        # = 13 - 8 = 5
+-        result = calculate('the result of ten plus three, minus the result of one plus seven')
+-        self.assertEqual(result, 5)
+-        self.assertIsInstance(result, int)
++        # 13 - 8 = 5
++        self.assertEqual(calculate('the result of ten plus three, minus the result of one plus seven'), 5)
+ 
+     def test_nested_both_sides_plus(self):
+-        result = calculate('the result of two plus three, plus the result of one plus four')
+-        self.assertEqual(result, 10)
+-        self.assertIsInstance(result, int)
++        self.assertEqual(calculate('the result of two plus three, plus the result of one plus four'), 10)
+ 
+     def test_nested_with_result_of_plus(self):
+-        result = calculate('six plus the result of two times three')
+-        self.assertEqual(result, 12)
+-        self.assertIsInstance(result, int)
++        self.assertEqual(calculate('six plus the result of two times three'), 12)
+ 
+     def test_nested_both_sides_times(self):
+-        result = calculate('the result of two plus three, times the result of one plus one')
+-        self.assertEqual(result, 10)
+-        self.assertIsInstance(result, int)
++        self.assertEqual(calculate('the result of two plus three, times the result of one plus one'), 10)
+ 
+     def test_nested_with_result_of_times(self):
+-        result = calculate('three times the result of two plus two')
+-        self.assertEqual(result, 12)
+-        self.assertIsInstance(result, int)
++        self.assertEqual(calculate('three times the result of two plus two'), 12)
+ 
+     def test_nested_with_result_of_divided(self):
+-        result = calculate('six divided by the result of one plus one')
+-        self.assertEqual(result, 3)
+-        self.assertIsInstance(result, int)
++        self.assertEqual(calculate('six divided by the result of one plus one'), 3)
+ 
+     def test_nested_both_sides_divided(self):
+-        result = calculate('the result of ten plus two, divided by the result of one plus one')
+-        self.assertEqual(result, 6)
+-        self.assertIsInstance(result, int)
++        self.assertEqual(calculate('the result of ten plus two, divided by the result of one plus one'), 6)
+ 
+     def test_comma_precedence_with_nested_divisor(self):
+-        result = calculate('six plus four, divided by the result of one plus one')
+-        self.assertEqual(result, 5)
+-        self.assertIsInstance(result, int)
++        self.assertEqual(calculate('six plus four, divided by the result of one plus one'), 5)
+ 
+     def test_case_insensitive(self):
+         result = calculate('ONE PLUS THREE')
+-- 
+2.39.5 (Apple Git-154)
+

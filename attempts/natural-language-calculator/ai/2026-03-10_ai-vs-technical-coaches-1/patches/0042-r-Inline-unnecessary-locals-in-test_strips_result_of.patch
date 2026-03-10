@@ -1,0 +1,30 @@
+From dec867a62930302826503282472a069907da79e1 Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 20:21:28 -0800
+Subject: [PATCH 42/56] - r Inline unnecessary locals in
+ test_strips_result_of_prefix
+
+---
+ katas/natural-language-calculator/tests/test_calculator.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/katas/natural-language-calculator/tests/test_calculator.py b/katas/natural-language-calculator/tests/test_calculator.py
+index b5a1fe3..4c03db4 100644
+--- a/katas/natural-language-calculator/tests/test_calculator.py
++++ b/katas/natural-language-calculator/tests/test_calculator.py
+@@ -125,9 +125,9 @@ class TestCalculate(unittest.TestCase):
+         self.assertEqual(calculate('The Result Of Three Times Three, Divided By Two'), 4.5)
+ 
+     def test_strips_result_of_prefix(self):
+-        result1 = calculate('the result of one plus three')
+-        result2 = calculate('one plus three')
+-        self.assertEqual(result1, result2)
++        self.assertEqual(
++            calculate('the result of one plus three'),
++            calculate('one plus three'))
+ 
+     def test_zero_operations(self):
+         self.assertEqual(calculate('zero plus five'), 5)
+-- 
+2.39.5 (Apple Git-154)
+

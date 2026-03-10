@@ -1,0 +1,28 @@
+From 68003cb5563002435e070e6c520acfea4bdbb9fb Mon Sep 17 00:00:00 2001
+From: Lada Kesseler <archie.kesseler@gmail.com>
+Date: Fri, 6 Mar 2026 21:04:47 -0800
+Subject: [PATCH 55/56] - r Rename create_test_file parameter from tmp_path to
+ directory
+
+---
+ .../natural-language-calculator/tests/test_file_operations.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/katas/natural-language-calculator/tests/test_file_operations.py b/katas/natural-language-calculator/tests/test_file_operations.py
+index e044537..4bdcbbc 100644
+--- a/katas/natural-language-calculator/tests/test_file_operations.py
++++ b/katas/natural-language-calculator/tests/test_file_operations.py
+@@ -7,8 +7,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+ from natural_language_calculator import main, output_filepath
+ 
+ 
+-def create_test_file(tmp_path, filename, content):
+-    filepath = os.path.join(tmp_path, filename)
++def create_test_file(directory, filename, content):
++    filepath = os.path.join(directory, filename)
+     with open(filepath, 'w') as f:
+         f.write(content)
+     return filepath
+-- 
+2.39.5 (Apple Git-154)
+
