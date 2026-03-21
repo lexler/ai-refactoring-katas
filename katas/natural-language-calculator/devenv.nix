@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   languages.python = {
@@ -8,5 +8,9 @@
 
   packages = [
     pkgs.uv
+    pkgs.bat
+    pkgs.viddy
+    inputs.yaks.packages.${pkgs.system}.default
+    inputs.llm-agents.packages.${pkgs.system}.pi
   ];
 }

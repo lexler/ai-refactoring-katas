@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+
+echo "==== running tests ===="
+python -m unittest tests.test_calculator -v
+echo "==== tests passed ===="
+
+echo "==== committing ===="
+git add -A
+git commit -m "$1"
