@@ -1,0 +1,3 @@
+#!/bin/bash
+
+viddy --differences -n 0.1 script -q /dev/null yx ls

@@ -4,3 +4,5 @@ inputs:
     inputs:
       nixpkgs:
         follows: nixpkgs
+  yaks:
+    url: github:mattwynne/yaks
